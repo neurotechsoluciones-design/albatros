@@ -40,11 +40,21 @@
             shine: {
               '0%': { backgroundPosition: '0% 50%' },
               '100%': { backgroundPosition: '200% 50%' }
+            },
+            sweep: {
+              '0%': { transform: 'translate3d(-120%, 0, 0) rotate(18deg)' },
+              '100%': { transform: 'translate3d(260%, 0, 0) rotate(18deg)' }
+            },
+            scanline: {
+              '0%, 100%': { transform: 'translateY(-8%)', opacity: '0.18' },
+              '50%': { transform: 'translateY(108%)', opacity: '0.42' }
             }
           },
           animation: {
             floaty: 'floaty 6s ease-in-out infinite',
-            shine: 'shine 10s linear infinite'
+            shine: 'shine 10s linear infinite',
+            sweep: 'sweep 8s linear infinite',
+            scanline: 'scanline 5.5s ease-in-out infinite'
           }
         }
       }
@@ -94,6 +104,178 @@
         linear-gradient(180deg, rgba(92,66,255,0.12), rgba(4,4,4,0.92)),
         #09090b;
       box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+    }
+    .tech-shell {
+      position: relative;
+      isolation: isolate;
+    }
+    .tech-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.03), transparent 28%, transparent 72%, rgba(92,66,255,0.10)),
+        radial-gradient(circle at top right, rgba(154,255,95,0.10), transparent 34%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .tech-shell::after {
+      content: "";
+      position: absolute;
+      top: -35%;
+      left: -20%;
+      width: 36%;
+      height: 170%;
+      background: linear-gradient(90deg, transparent, rgba(154,255,95,0.16), rgba(92,66,255,0.18), transparent);
+      filter: blur(18px);
+      opacity: 0.7;
+      pointer-events: none;
+      animation: sweep 8s linear infinite;
+      z-index: 0;
+    }
+    .tech-shell > * {
+      position: relative;
+      z-index: 1;
+    }
+    .tech-media {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(92,66,255,0.18), transparent 40%),
+        #08080b;
+    }
+    .tech-carousel {
+      position: relative;
+      min-height: 220px;
+    }
+    .tech-carousel-stage {
+      position: relative;
+      min-height: inherit;
+    }
+    .tech-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.03);
+      transition: opacity 700ms ease, transform 1200ms ease;
+    }
+    .tech-slide.is-active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 2;
+    }
+    .tech-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .tech-carousel-dots {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      display: flex;
+      gap: 0.45rem;
+      z-index: 4;
+    }
+    .tech-carousel-dot {
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.12);
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+    }
+    .tech-carousel-dot.is-active {
+      background: #9AFF5F;
+      border-color: rgba(154,255,95,0.7);
+      transform: scale(1.15);
+    }
+    .tech-media::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .tech-media::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 22%;
+      background: linear-gradient(180deg, rgba(154,255,95,0), rgba(154,255,95,0.12), rgba(92,66,255,0.18), rgba(154,255,95,0));
+      filter: blur(8px);
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 2;
+      animation: scanline 5.5s ease-in-out infinite;
+    }
+    .tech-image-tag {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 1rem;
+      background: linear-gradient(180deg, rgba(4,4,6,0.72), rgba(4,4,6,0.92));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 3;
+    }
+    .tech-dot {
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 9999px;
+      background: #9AFF5F;
+      box-shadow: 0 0 0 0 rgba(154,255,95,0.45);
+      animation: pulse 2.8s ease-out infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(154,255,95,0.45); }
+      70% { box-shadow: 0 0 0 14px rgba(154,255,95,0); }
+      100% { box-shadow: 0 0 0 0 rgba(154,255,95,0); }
+    }
+    .presenter-dock {
+      background: linear-gradient(180deg, rgba(10,10,14,0.92), rgba(4,4,6,0.96));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 28px 90px rgba(0,0,0,0.38);
+    }
+    .presenter-chip[aria-current="true"] {
+      border-color: rgba(154,255,95,0.45);
+      color: #9AFF5F;
+      background: rgba(154,255,95,0.10);
+    }
+    .presenter-chip {
+      transition: border-color 220ms ease, color 220ms ease, background 220ms ease, transform 220ms ease;
+    }
+    .presenter-chip:hover {
+      transform: translateY(-1px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tech-shell::after,
+      .tech-media::after,
+      .tech-dot,
+      .animate-floaty,
+      .animate-shine {
+        animation: none !important;
+      }
+      .tech-slide,
+      .video-preview img {
+        transition: none !important;
+      }
     }
     .video-preview {
       position: relative;
@@ -228,12 +410,12 @@
   <header class="sticky top-0 z-50 border-b border-white/10 bg-black/55 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-0">
-        <div class="w-12 h-12 rounded-xl bg-black border border-neuro-green/30 flex items-center justify-center shadow-glow">
-          <span class="font-orbitron font-black text-neuro-green text-lg">NT</span>
+        <div class="w-12 h-12 rounded-xl overflow-hidden bg-black border border-neuro-green/30 shadow-glow shrink-0">
+          <img src="https://d2u1z1lopyfwlx.cloudfront.net/thumbnails/7723eb7e-e952-5f88-88a2-04700d143b8c/222ac340-fa5d-5f16-81c7-2cb2ab6c5aad.jpg" alt="Albatro Errante" class="w-full h-full object-cover">
         </div>
         <div class="min-w-0">
-          <p class="font-orbitron text-sm md:text-base font-bold tracking-[0.18em] truncate">SISTEMA MODULAR UAV + IA</p>
-          <p class="text-[11px] text-gray-400 tracking-[0.15em] uppercase">Propuesta comercial para defensa</p>
+          <p class="font-orbitron text-sm md:text-base font-bold tracking-[0.18em] truncate">ALBATRO ERRANTE</p>
+          <p class="text-[11px] text-gray-400 tracking-[0.15em] uppercase">Sistema modular UAV + IA para entornos extremos</p>
         </div>
       </div>
       <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
@@ -248,10 +430,13 @@
     </div>
   </header>
 
-  <section class="relative">
+  <section id="inicio" data-nav-section data-nav-title="Inicio" class="relative scroll-mt-28">
     <div class="max-w-7xl mx-auto px-5 pt-16 pb-12 md:pt-24 md:pb-20">
       <div class="grid lg:grid-cols-[1.1fr_.9fr] gap-12 items-center">
         <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] tracking-[0.18em] uppercase text-gray-300 mb-4">
+            Proyecto Albatro Errante
+          </div>
           <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] tracking-[0.18em] uppercase text-gray-300 mb-6">
             Extremo. Modular. Escalable.
           </div>
@@ -287,18 +472,25 @@
         </div>
 
         <div class="relative">
-          <div class="glass rounded-[2rem] p-4 shadow-blueglow">
-            <div class="rounded-[1.5rem] overflow-hidden border border-white/10 bg-[#09090b]">
-              <img src="https://img.youtube.com/vi/OO8RZYkZcx0/maxresdefault.jpg" alt="Drone en operación antártica" class="w-full h-[420px] object-cover opacity-90">
+          <div class="glass tech-shell rounded-[2rem] p-4 shadow-blueglow">
+            <div class="tech-media rounded-[1.5rem] border border-white/10">
+              <img src="https://d2u1z1lopyfwlx.cloudfront.net/thumbnails/7723eb7e-e952-5f88-88a2-04700d143b8c/222ac340-fa5d-5f16-81c7-2cb2ab6c5aad.jpg" alt="Albatro Errante" class="w-full h-[420px] object-cover opacity-90">
+              <div class="tech-image-tag">
+                <div>
+                  <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase text-neuro-green">Identidad del proyecto</p>
+                  <p class="mt-1 text-sm font-semibold text-white">Albatro Errante</p>
+                </div>
+                <span class="tech-dot" aria-hidden="true"></span>
+              </div>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-4">
               <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
-                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-green">Uso táctico</p>
-                <p class="mt-2 text-sm text-gray-300">ISR, SAR, vigilancia, logística liviana, oceanografía y análisis ambiental.</p>
+                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-green">Proyecto</p>
+                <p class="mt-2 text-sm text-gray-300">Albatro Errante aporta una identidad visual más clara para presentar la propuesta modular con mayor recordación y presencia.</p>
               </div>
               <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
-                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-blue2">Ventaja clave</p>
-                <p class="mt-2 text-sm text-gray-300">Menor exposición de personal y mejor persistencia en entornos hostiles.</p>
+                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-blue2">Presencia visual</p>
+                <p class="mt-2 text-sm text-gray-300">Refuerza la narrativa del sistema con una imagen propia del proyecto, sin depender solo de capturas de plataformas o videos.</p>
               </div>
             </div>
           </div>
@@ -311,7 +503,7 @@
     </div>
   </section>
 
-  <section id="vision" class="py-12 md:py-16">
+  <section id="vision" data-nav-section data-nav-title="Visión" class="py-12 md:py-16 scroll-mt-28">
     <div class="max-w-7xl mx-auto px-5">
       <div class="fade-line mb-8"></div>
       <div class="grid lg:grid-cols-3 gap-6">
@@ -339,7 +531,7 @@
     </div>
   </section>
 
-  <section id="productos" class="py-10 md:py-16">
+  <section id="productos" data-nav-section data-nav-title="Productos" class="py-10 md:py-16 scroll-mt-28">
     <div class="max-w-7xl mx-auto px-5">
       <div class="flex items-end justify-between gap-4 flex-wrap mb-8">
         <div>
@@ -353,7 +545,7 @@
     </div>
   </section>
 
-  <section id="arquitectura" class="py-12 md:py-18">
+  <section id="arquitectura" data-nav-section data-nav-title="Arquitectura" class="py-12 md:py-18 scroll-mt-28">
     <div class="max-w-7xl mx-auto px-5">
       <div class="glass rounded-[2rem] p-6 md:p-8 overflow-hidden">
         <div class="flex flex-wrap items-end justify-between gap-5 mb-8">
@@ -429,7 +621,7 @@
     </div>
   </section>
 
-  <section id="implementacion" class="py-12 md:py-18">
+  <section id="implementacion" data-nav-section data-nav-title="Implementación" class="py-12 md:py-18 scroll-mt-28">
     <div class="max-w-7xl mx-auto px-5">
       <div class="grid lg:grid-cols-2 gap-6">
         <div class="glass rounded-[2rem] p-6 md:p-8">
@@ -485,10 +677,10 @@
     </div>
   </section>
 
-  <footer class="py-14 md:py-20">
+  <footer id="cierre" data-nav-section data-nav-title="Cierre" class="py-14 md:py-20 scroll-mt-28">
     <div class="max-w-7xl mx-auto px-5">
       <div class="glass rounded-[2rem] p-8 md:p-10 text-center">
-        <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Cierre comercial</p>
+        <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Síntesis estratégica</p>
         <h2 class="mt-3 font-orbitron font-black text-3xl md:text-5xl leading-tight">Una inversión en capacidad estratégica, no una compra aislada de equipos.</h2>
         <p class="mt-5 max-w-3xl mx-auto text-gray-300 leading-relaxed">La propuesta integra medios probados, inteligencia aplicada, comunicaciones resilientes y escalabilidad por módulos para construir una capacidad real de defensa, reconocimiento y vigilancia en entornos extremos.</p>
         <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
@@ -498,6 +690,43 @@
       </div>
     </div>
   </footer>
+
+  <div class="fixed bottom-5 left-1/2 z-40 hidden -translate-x-1/2 lg:flex items-center gap-3 presenter-dock rounded-[1.5rem] px-4 py-3">
+    <button type="button" data-nav-action="prev" class="px-4 py-3 rounded-2xl border border-white/10 bg-white/5 text-sm font-semibold text-white hover:border-neuro-green/40 hover:text-neuro-green transition">Anterior</button>
+    <div class="px-4 min-w-[220px]">
+      <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase text-gray-400">Modo exposición</p>
+      <p id="presenter-current" class="mt-1 font-orbitron text-sm text-white">Inicio</p>
+    </div>
+    <button type="button" data-nav-action="next" class="px-4 py-3 rounded-2xl bg-neuro-green text-black text-sm font-orbitron font-bold hover:bg-white transition">Siguiente</button>
+  </div>
+
+  <div class="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 xl:flex flex-col gap-2 presenter-dock rounded-[1.5rem] p-3">
+    <button type="button" data-section-target="inicio" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Inicio</button>
+    <button type="button" data-section-target="vision" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Visión</button>
+    <button type="button" data-section-target="productos" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Productos</button>
+    <button type="button" data-section-target="arquitectura" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Arquitectura</button>
+    <button type="button" data-section-target="implementacion" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Implementación</button>
+    <button type="button" data-section-target="cierre" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Cierre</button>
+  </div>
+
+  <div class="fixed inset-x-4 bottom-4 z-40 lg:hidden">
+    <div class="presenter-dock rounded-[1.5rem] p-3">
+      <div class="flex items-center gap-2">
+        <button type="button" data-nav-action="prev" class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white">Anterior</button>
+        <button type="button" id="mobile-sections-toggle" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-neuro-green">Secciones</button>
+        <button type="button" data-nav-action="next" class="flex-1 rounded-2xl bg-neuro-green px-4 py-3 text-sm font-orbitron font-bold text-black">Siguiente</button>
+      </div>
+      <p id="mobile-presenter-current" class="mt-3 text-center text-xs tracking-[0.18em] uppercase text-gray-400">Inicio</p>
+      <div id="mobile-sections-panel" class="hidden mt-3 grid grid-cols-2 gap-2">
+        <button type="button" data-section-target="inicio" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Inicio</button>
+        <button type="button" data-section-target="vision" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Visión</button>
+        <button type="button" data-section-target="productos" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Productos</button>
+        <button type="button" data-section-target="arquitectura" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Arquitectura</button>
+        <button type="button" data-section-target="implementacion" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Implementación</button>
+        <button type="button" data-section-target="cierre" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Cierre</button>
+      </div>
+    </div>
+  </div>
 
   <div id="video-modal" class="video-modal-backdrop hidden" aria-hidden="true">
     <div class="video-modal-dialog">
@@ -529,8 +758,10 @@
         category: 'UAV táctico multirrotor',
         accent: 'green',
         subtitle: 'Respuesta rápida, ISR y apoyo SAR con precisión RTK.',
-        image: 'https://www-cdn.djiits.com/dps/677d5da2fabdd4bb8c1f60c8e8109937.svg',
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/2025-07-10-Waldbrand%C3%BCbung-3625.jpg',
         preview: 'https://img.youtube.com/vi/JPPHG5dSpwM/hqdefault.jpg',
+        imageFocus: 'center center',
+        detailFocus: '62% center',
         video: 'https://www.youtube.com/embed/JPPHG5dSpwM',
         bullets: [
           'Hasta 55 min de vuelo',
@@ -548,6 +779,8 @@
         subtitle: 'Cobertura extendida sin necesidad de pista preparada.',
         image: 'https://a.storyblok.com/f/294510/1920x1280/547fb64d93/evo-section-2-image.png',
         preview: 'https://img.youtube.com/vi/xJ2aFkWXlcE/hqdefault.jpg',
+        imageFocus: 'center center',
+        detailFocus: '74% center',
         video: 'https://www.youtube.com/embed/xJ2aFkWXlcE',
         bullets: [
           'Hasta 230 km de rango máximo publicado',
@@ -565,6 +798,8 @@
         subtitle: 'Carga pesada, gran alcance y utilidad dual para defensa y logística.',
         image: 'https://windracers.com/wp-content/uploads/2024/12/Windracers-ULTRA-Parcel-Loading-1-copy.jpg.webp',
         preview: 'https://img.youtube.com/vi/OO8RZYkZcx0/hqdefault.jpg',
+        imageFocus: 'center center',
+        detailFocus: '60% center',
         video: 'https://www.youtube.com/embed/OO8RZYkZcx0',
         bullets: [
           'Más de 150 kg de carga útil publicada',
@@ -582,6 +817,8 @@
         subtitle: 'Monitoreo marítimo, seguridad y levantamiento de datos con muy alta persistencia.',
         image: 'https://cdn.prod.website-files.com/653530fc2845a4410ac6dd36/6942968146e20c4d2f694ddf_mda-cta.avif',
         preview: 'https://img.youtube.com/vi/hpTc3Yc4HrU/hqdefault.jpg',
+        imageFocus: 'center center',
+        detailFocus: '35% center',
         video: 'https://www.youtube.com/embed/hpTc3Yc4HrU',
         bullets: [
           'Explorer: vehículo de 23 pies impulsado por viento y energía solar',
@@ -623,22 +860,79 @@
         .replace(/>/g, '&gt;');
     }
 
+    function buildGallery(product) {
+      return [
+        {
+          src: product.image,
+          fallback: product.preview,
+          label: 'Vista principal',
+          caption: product.name,
+          position: product.imageFocus || 'center center'
+        },
+        {
+          src: product.preview,
+          fallback: product.image,
+          label: 'Escena operativa',
+          caption: product.subtitle,
+          position: 'center center'
+        },
+        {
+          src: product.image,
+          fallback: product.preview,
+          label: 'Detalle de plataforma',
+          caption: product.tags.slice(0, 2).join(' • '),
+          position: product.detailFocus || 'center center'
+        }
+      ];
+    }
+
     const prefersLocalPresentationMode = window.location.protocol === 'file:';
     const normalizedProducts = products.map(product => {
       const videoId = getVideoId(product.video);
       return {
         ...product,
-        videoId
+        videoId,
+        gallery: buildGallery(product)
       };
     });
 
     const grid = document.getElementById('product-grid');
     grid.innerHTML = normalizedProducts.map((p, i) => `
-      <article class="glass rounded-[2rem] p-5 md:p-7 overflow-hidden">
+      <article class="glass tech-shell rounded-[2rem] p-5 md:p-7 overflow-hidden">
         <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-6 items-start">
           <div class="${i % 2 === 1 ? 'lg:order-2' : ''}">
-            <div class="rounded-[1.5rem] overflow-hidden border border-white/10 bg-[#08080b]">
-              <img src="${p.image}" alt="${p.name}" class="w-full h-[220px] md:h-[280px] object-cover opacity-90">
+            <div class="tech-media tech-carousel rounded-[1.5rem] border border-white/10" data-carousel>
+              <div class="tech-carousel-stage h-[220px] md:h-[280px]">
+                ${p.gallery.map((slide, slideIndex) => `
+                  <figure class="tech-slide ${slideIndex === 0 ? 'is-active' : ''}" data-slide-index="${slideIndex}">
+                    <img
+                      src="${slide.src}"
+                      data-fallback="${slide.fallback}"
+                      onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){this.src=this.dataset.fallback}"
+                      alt="${p.name} - ${slide.label}"
+                      style="object-position:${slide.position};"
+                      class="opacity-90"
+                    >
+                    <div class="tech-image-tag">
+                      <div>
+                        <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase ${p.accent === 'green' ? 'text-neuro-green' : 'text-neuro-blue2'}">${slide.label}</p>
+                        <p class="mt-1 text-sm font-semibold text-white">${slide.caption}</p>
+                      </div>
+                      <span class="tech-dot" aria-hidden="true"></span>
+                    </div>
+                  </figure>
+                `).join('')}
+              </div>
+              <div class="tech-carousel-dots" role="tablist" aria-label="Galería visual de ${p.name}">
+                ${p.gallery.map((slide, slideIndex) => `
+                  <button
+                    type="button"
+                    class="tech-carousel-dot ${slideIndex === 0 ? 'is-active' : ''}"
+                    data-carousel-dot="${slideIndex}"
+                    aria-label="Ver ${slide.label.toLowerCase()}"
+                  ></button>
+                `).join('')}
+              </div>
             </div>
             <div class="mt-4 video-showcase">
               <button
@@ -718,6 +1012,50 @@
       </article>
     `).join('');
 
+    function setCarouselSlide(carousel, nextIndex) {
+      const slides = Array.from(carousel.querySelectorAll('.tech-slide'));
+      const dots = Array.from(carousel.querySelectorAll('.tech-carousel-dot'));
+      if (!slides.length) return;
+
+      const normalizedIndex = (nextIndex + slides.length) % slides.length;
+      carousel.dataset.activeSlide = String(normalizedIndex);
+
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('is-active', index === normalizedIndex);
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('is-active', index === normalizedIndex);
+      });
+    }
+
+    function startCarousel(carousel) {
+      const slides = carousel.querySelectorAll('.tech-slide');
+      if (slides.length < 2) return;
+
+      const rotate = () => {
+        const current = Number(carousel.dataset.activeSlide || 0);
+        setCarouselSlide(carousel, current + 1);
+      };
+
+      let intervalId = window.setInterval(rotate, 4300);
+      carousel.addEventListener('mouseenter', () => window.clearInterval(intervalId));
+      carousel.addEventListener('mouseleave', () => {
+        window.clearInterval(intervalId);
+        intervalId = window.setInterval(rotate, 4300);
+      });
+    }
+
+    document.querySelectorAll('[data-carousel]').forEach(carousel => {
+      setCarouselSlide(carousel, 0);
+      startCarousel(carousel);
+
+      carousel.addEventListener('click', event => {
+        const dot = event.target.closest('[data-carousel-dot]');
+        if (!dot) return;
+        setCarouselSlide(carousel, Number(dot.dataset.carouselDot || 0));
+      });
+    });
+
     const modal = document.getElementById('video-modal');
     const modalDialog = modal.querySelector('.video-modal-dialog');
     const modalTitle = document.getElementById('video-modal-title');
@@ -725,6 +1063,13 @@
     const modalNote = document.getElementById('video-modal-note');
     const modalClose = document.getElementById('video-modal-close');
     const modalFullscreen = document.getElementById('video-fullscreen-btn');
+    const navSections = Array.from(document.querySelectorAll('[data-nav-section]'));
+    const navCurrent = document.getElementById('presenter-current');
+    const navMobileCurrent = document.getElementById('mobile-presenter-current');
+    const mobileSectionsToggle = document.getElementById('mobile-sections-toggle');
+    const mobileSectionsPanel = document.getElementById('mobile-sections-panel');
+    const sectionTargetButtons = Array.from(document.querySelectorAll('[data-section-target]'));
+    let activeSectionIndex = 0;
 
     function stopInlinePlayers(exceptFrame = null) {
       document.querySelectorAll('.video-inline').forEach(container => {
@@ -782,6 +1127,50 @@
       document.body.classList.remove('overflow-hidden');
     }
 
+    function syncSectionUI(index) {
+      const section = navSections[index];
+      if (!section) return;
+
+      const title = section.dataset.navTitle || 'Sección';
+      activeSectionIndex = index;
+      navCurrent.textContent = title;
+      navMobileCurrent.textContent = title;
+
+      sectionTargetButtons.forEach(button => {
+        const isActive = button.dataset.sectionTarget === section.id;
+        button.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+    }
+
+    function goToSection(index) {
+      const boundedIndex = Math.max(0, Math.min(navSections.length - 1, index));
+      const section = navSections[boundedIndex];
+      if (!section) return;
+
+      syncSectionUI(boundedIndex);
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      mobileSectionsPanel.classList.add('hidden');
+    }
+
+    const sectionObserver = new IntersectionObserver(entries => {
+      const visibleEntry = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visibleEntry) return;
+
+      const index = navSections.findIndex(section => section === visibleEntry.target);
+      if (index >= 0) {
+        syncSectionUI(index);
+      }
+    }, {
+      threshold: [0.3, 0.45, 0.6, 0.8],
+      rootMargin: '-20% 0px -35% 0px'
+    });
+
+    navSections.forEach(section => sectionObserver.observe(section));
+    syncSectionUI(0);
+
     grid.addEventListener('click', event => {
       const trigger = event.target.closest('button[data-video-id]');
       if (!trigger) return;
@@ -795,6 +1184,26 @@
         trigger.dataset.videoId,
         trigger.dataset.videoTitle || 'Video'
       );
+    });
+
+    document.querySelectorAll('[data-nav-action]').forEach(button => {
+      button.addEventListener('click', () => {
+        const step = button.dataset.navAction === 'next' ? 1 : -1;
+        goToSection(activeSectionIndex + step);
+      });
+    });
+
+    sectionTargetButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const index = navSections.findIndex(section => section.id === button.dataset.sectionTarget);
+        if (index >= 0) {
+          goToSection(index);
+        }
+      });
+    });
+
+    mobileSectionsToggle.addEventListener('click', () => {
+      mobileSectionsPanel.classList.toggle('hidden');
     });
 
     modalClose.addEventListener('click', closeVideoModal);
