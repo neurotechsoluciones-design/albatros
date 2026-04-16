@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Sistema Modular de Drones + IA para Defensa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neuro: {
+              black: '#040404',
+              dark: '#0B0B0F',
+              panel: 'rgba(255,255,255,0.04)',
+              line: 'rgba(255,255,255,0.10)',
+              green: '#9AFF5F',
+              blue: '#2100E5',
+              blue2: '#5C42FF'
+            }
+          },
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          },
+          boxShadow: {
+            glow: '0 0 40px rgba(154,255,95,0.12)',
+            blueglow: '0 0 40px rgba(33,0,229,0.20)'
+          },
+          keyframes: {
+            floaty: {
+              '0%,100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' }
+            },
+            shine: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '100%': { backgroundPosition: '200% 50%' }
+            }
+          },
+          animation: {
+            floaty: 'floaty 6s ease-in-out infinite',
+            shine: 'shine 10s linear infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #040404;
+      color: white;
+      overflow-x: hidden;
+    }
+    .grid-bg {
+      background-size: 42px 42px;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+      mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+      -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+    }
+    .glass {
+      background: rgba(10,10,14,0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .grad-text {
+      background: linear-gradient(90deg, #ffffff 0%, #9AFF5F 35%, #7B68FF 70%, #ffffff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .video-frame {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1rem;
+      overflow: hidden;
+      background: #09090b;
+    }
+    .video-showcase {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(92,66,255,0.12), rgba(4,4,4,0.92)),
+        #09090b;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+    }
+    .video-preview {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #09090b;
+      cursor: pointer;
+    }
+    .video-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.82;
+      transform: scale(1.01);
+      transition: transform 300ms ease, opacity 300ms ease;
+    }
+    .video-preview:hover img,
+    .video-preview:focus-visible img {
+      transform: scale(1.06);
+      opacity: 0.96;
+    }
+    .video-preview-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.25rem;
+      background:
+        linear-gradient(180deg, rgba(4,4,4,0.16) 0%, rgba(4,4,4,0.2) 30%, rgba(4,4,4,0.84) 100%);
+    }
+    .video-play {
+      width: 4.5rem;
+      height: 4.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+    }
+    .video-preview:hover .video-play,
+    .video-preview:focus-visible .video-play {
+      transform: scale(1.06);
+      background: rgba(154,255,95,0.20);
+      border-color: rgba(154,255,95,0.45);
+    }
+    .video-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+    .video-inline {
+      padding: 0 1.25rem 1.25rem;
+      background: rgba(255,255,255,0.03);
+    }
+    .video-inline.hidden {
+      display: none;
+    }
+    .video-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background: rgba(2,4,8,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .video-modal-backdrop.hidden {
+      display: none;
+    }
+    .video-modal-dialog {
+      width: min(1120px, 100%);
+      border-radius: 1.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(circle at top, rgba(92,66,255,0.18), transparent 42%),
+        linear-gradient(180deg, rgba(16,16,22,0.98), rgba(4,4,6,0.98));
+      box-shadow: 0 45px 140px rgba(0,0,0,0.48);
+    }
+    .video-modal-stage {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background: #050505;
+    }
+    .video-modal-stage iframe,
+    .video-modal-stage img {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+    }
+    .video-modal-note {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+    .video-icon-play {
+      width: 0;
+      height: 0;
+      margin-left: 0.18rem;
+      border-top: 0.7rem solid transparent;
+      border-bottom: 0.7rem solid transparent;
+      border-left: 1.15rem solid white;
+    }
+    .spec-pill {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+    .fade-line {
+      background: linear-gradient(90deg, rgba(154,255,95,0), rgba(154,255,95,.7), rgba(92,66,255,.7), rgba(154,255,95,0));
+      height: 1px;
+    }
+  </style>
+</head>
+<body class="bg-neuro-black text-white">
+  <div class="fixed inset-0 grid-bg pointer-events-none"></div>
+  <div class="fixed -top-40 -left-24 w-[34rem] h-[34rem] rounded-full bg-neuro-blue opacity-20 blur-[120px] pointer-events-none"></div>
+  <div class="fixed top-40 right-[-8rem] w-[28rem] h-[28rem] rounded-full bg-neuro-green opacity-10 blur-[120px] pointer-events-none"></div>
+
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-black/55 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-12 h-12 rounded-xl bg-black border border-neuro-green/30 flex items-center justify-center shadow-glow">
+          <span class="font-orbitron font-black text-neuro-green text-lg">NT</span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-orbitron text-sm md:text-base font-bold tracking-[0.18em] truncate">SISTEMA MODULAR UAV + IA</p>
+          <p class="text-[11px] text-gray-400 tracking-[0.15em] uppercase">Propuesta comercial para defensa</p>
+        </div>
+      </div>
+      <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
+        <a href="#vision" class="hover:text-neuro-green transition">Visión</a>
+        <a href="#productos" class="hover:text-neuro-green transition">Productos</a>
+        <a href="#arquitectura" class="hover:text-neuro-green transition">Arquitectura</a>
+        <a href="#implementacion" class="hover:text-neuro-green transition">Implementación</a>
+      </nav>
+      <a href="#productos" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neuro-green text-black font-orbitron font-bold text-xs hover:bg-white transition">
+        Ver propuesta
+      </a>
+    </div>
+  </header>
+
+  <section class="relative">
+    <div class="max-w-7xl mx-auto px-5 pt-16 pb-12 md:pt-24 md:pb-20">
+      <div class="grid lg:grid-cols-[1.1fr_.9fr] gap-12 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] tracking-[0.18em] uppercase text-gray-300 mb-6">
+            Extremo. Modular. Escalable.
+          </div>
+          <h1 class="font-orbitron font-black text-4xl md:text-6xl leading-[1.02] tracking-tight max-w-4xl">
+            Arquitectura de <span class="grad-text animate-shine">drones, IA y vigilancia de superficie</span> para misiones críticas.
+          </h1>
+          <p class="mt-6 max-w-2xl text-base md:text-lg text-gray-300 leading-relaxed">
+            Una propuesta visual y comercial para desplegar capacidad operativa incremental en escenarios de defensa, búsqueda y rescate, reconocimiento, logística y monitoreo en entornos extremos como la Antártida.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#productos" class="px-6 py-3 rounded-2xl bg-neuro-green text-black font-orbitron font-bold text-sm hover:bg-white transition shadow-glow">Explorar productos</a>
+            <a href="#arquitectura" class="px-6 py-3 rounded-2xl border border-white/10 bg-white/5 text-white font-orbitron font-bold text-sm hover:border-neuro-green/40 hover:text-neuro-green transition">Ver arquitectura modular</a>
+          </div>
+
+          <div class="mt-10 grid sm:grid-cols-3 gap-4 max-w-3xl">
+            <div class="glass rounded-2xl p-4">
+              <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Cobertura</p>
+              <p class="mt-2 text-2xl font-bold">Aérea + Marítima</p>
+              <p class="mt-2 text-sm text-gray-400">Capas coordinadas según misión, terreno y ventana operativa.</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.2em] uppercase">IA aplicada</p>
+              <p class="mt-2 text-2xl font-bold">Edge + Estación</p>
+              <p class="mt-2 text-sm text-gray-400">Análisis asistido, priorización de alertas y explotación de datos.</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Compra pública</p>
+              <p class="mt-2 text-2xl font-bold">Implementación gradual</p>
+              <p class="mt-2 text-sm text-gray-400">Escalable por módulos según presupuesto, base y necesidad.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="glass rounded-[2rem] p-4 shadow-blueglow">
+            <div class="rounded-[1.5rem] overflow-hidden border border-white/10 bg-[#09090b]">
+              <img src="https://img.youtube.com/vi/OO8RZYkZcx0/maxresdefault.jpg" alt="Drone en operación antártica" class="w-full h-[420px] object-cover opacity-90">
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4">
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-green">Uso táctico</p>
+                <p class="mt-2 text-sm text-gray-300">ISR, SAR, vigilancia, logística liviana, oceanografía y análisis ambiental.</p>
+              </div>
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-blue2">Ventaja clave</p>
+                <p class="mt-2 text-sm text-gray-300">Menor exposición de personal y mejor persistencia en entornos hostiles.</p>
+              </div>
+            </div>
+          </div>
+          <div class="absolute -bottom-4 -right-4 glass rounded-2xl px-4 py-3 animate-floaty">
+            <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase text-neuro-green">Operaciones extremas</p>
+            <p class="mt-1 text-sm text-gray-200">Frío, nieve, vientos, baja infraestructura.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vision" class="py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="fade-line mb-8"></div>
+      <div class="grid lg:grid-cols-3 gap-6">
+        <div class="glass rounded-3xl p-6 lg:col-span-1">
+          <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Propuesta de valor</p>
+          <h2 class="mt-3 font-orbitron font-bold text-2xl md:text-3xl">No es un dron. Es una capacidad operativa ampliable.</h2>
+        </div>
+        <div class="glass rounded-3xl p-6 lg:col-span-2">
+          <div class="grid md:grid-cols-3 gap-5">
+            <div>
+              <p class="text-sm font-semibold text-white">Eficiencia operativa</p>
+              <p class="mt-2 text-sm text-gray-400">Más cobertura por misión, menos despliegue humano directo y mejor lectura situacional.</p>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white">Reducción de riesgo</p>
+              <p class="mt-2 text-sm text-gray-400">Se traslada exposición desde personal hacia sistemas no tripulados y sensores remotos.</p>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white">Escalabilidad presupuestaria</p>
+              <p class="mt-2 text-sm text-gray-400">Se puede comenzar con núcleo táctico y crecer hacia alcance extendido, IA y superficie.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="productos" class="py-10 md:py-16">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="flex items-end justify-between gap-4 flex-wrap mb-8">
+        <div>
+          <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.2em] uppercase">Portafolio recomendado</p>
+          <h2 class="mt-2 font-orbitron font-bold text-3xl md:text-4xl">Productos ancla de la solución</h2>
+        </div>
+        <p class="max-w-xl text-sm text-gray-400">Cada bloque combina medio no tripulado, sensores, navegación y potencial de integración con IA. La selección puede ajustarse por equivalencia técnica en un proceso de compra pública.</p>
+      </div>
+
+      <div id="product-grid" class="space-y-10"></div>
+    </div>
+  </section>
+
+  <section id="arquitectura" class="py-12 md:py-18">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="glass rounded-[2rem] p-6 md:p-8 overflow-hidden">
+        <div class="flex flex-wrap items-end justify-between gap-5 mb-8">
+          <div>
+            <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Arquitectura modular</p>
+            <h2 class="mt-2 font-orbitron font-bold text-3xl md:text-4xl">Capas de misión que escalan sin rehacer la inversión</h2>
+          </div>
+          <div class="max-w-xl text-sm text-gray-400">La solución se implementa por etapas: núcleo táctico, analítica inteligente, alcance extendido, persistencia marítima y módulos especializados.</div>
+        </div>
+
+        <div class="grid md:grid-cols-5 gap-4">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Módulo 1</p>
+            <h3 class="mt-3 font-semibold text-lg">Núcleo táctico</h3>
+            <p class="mt-2 text-sm text-gray-400">Multirrotor ISR, estación de control, EO/IR y despliegue inmediato.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.16em] uppercase">Módulo 2</p>
+            <h3 class="mt-3 font-semibold text-lg">IA operacional</h3>
+            <p class="mt-2 text-sm text-gray-400">Alertas, clasificación, análisis de video y soporte a decisión.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Módulo 3</p>
+            <h3 class="mt-3 font-semibold text-lg">Alcance extendido</h3>
+            <p class="mt-2 text-sm text-gray-400">VTOL o ala fija para grandes áreas, autonomía y persistencia.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.16em] uppercase">Módulo 4</p>
+            <h3 class="mt-3 font-semibold text-lg">Superficie no tripulada</h3>
+            <p class="mt-2 text-sm text-gray-400">USV para monitoreo oceánico, seguridad marítima y batimetría.</p>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Módulo 5</p>
+            <h3 class="mt-3 font-semibold text-lg">Sensores avanzados</h3>
+            <p class="mt-2 text-sm text-gray-400">GPR, LiDAR, CTD, sonar multihaz, modelos de anomalías y fauna.</p>
+          </div>
+        </div>
+
+        <div class="mt-8 grid lg:grid-cols-[1.15fr_.85fr] gap-6">
+          <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-6">
+            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Flujo operativo</p>
+            <div class="mt-4 grid md:grid-cols-4 gap-3 text-sm">
+              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
+                <p class="font-semibold">Captura</p>
+                <p class="mt-2 text-gray-400">EO/IR, LiDAR, telemetría, sonar y sensores ambientales.</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
+                <p class="font-semibold">Enlace</p>
+                <p class="mt-2 text-gray-400">Iridium para capa crítica y enlaces de mayor ancho de banda cuando aplique.</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
+                <p class="font-semibold">Procesamiento</p>
+                <p class="mt-2 text-gray-400">Edge computing embarcado o estación táctica para priorizar eventos.</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
+                <p class="font-semibold">Decisión</p>
+                <p class="mt-2 text-gray-400">Tableros, alertas, explotación de datos y trazabilidad de misión.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.16em] uppercase">Misiones objetivo</p>
+            <div class="mt-4 space-y-3 text-sm text-gray-300">
+              <div class="rounded-2xl border border-white/10 px-4 py-3">Búsqueda y rescate con apoyo térmico y priorización de hallazgos.</div>
+              <div class="rounded-2xl border border-white/10 px-4 py-3">Detección de grietas y anomalías como capacidad integrable y escalable.</div>
+              <div class="rounded-2xl border border-white/10 px-4 py-3">Reconocimiento de personas, vigilancia y evaluación de áreas de riesgo.</div>
+              <div class="rounded-2xl border border-white/10 px-4 py-3">Monitoreo ambiental, marítimo y de fauna con mínima perturbación humana.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="implementacion" class="py-12 md:py-18">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass rounded-[2rem] p-6 md:p-8">
+          <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Implementación recomendada</p>
+          <h2 class="mt-2 font-orbitron font-bold text-3xl">Hoja de ruta por fases</h2>
+          <div class="mt-6 space-y-4">
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-green">Fase 1</p>
+              <p class="mt-2 font-semibold">Capacidad inicial</p>
+              <p class="mt-2 text-sm text-gray-400">Plataforma táctica, estación de control, entrenamiento y procedimientos base.</p>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-blue2">Fase 2</p>
+              <p class="mt-2 font-semibold">Analítica e IA</p>
+              <p class="mt-2 text-sm text-gray-400">Automatización de alertas, clasificación y tableros de explotación.</p>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-green">Fase 3</p>
+              <p class="mt-2 font-semibold">Cobertura ampliada</p>
+              <p class="mt-2 text-sm text-gray-400">Integración de ala fija o VTOL de largo alcance y enlaces avanzados.</p>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-blue2">Fase 4</p>
+              <p class="mt-2 font-semibold">Persistencia marítima y especialización</p>
+              <p class="mt-2 text-sm text-gray-400">USV, sensores específicos y perfiles de misión ajustados a teatro operativo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-[2rem] p-6 md:p-8">
+          <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.2em] uppercase">Ventajas para decisión</p>
+          <h2 class="mt-2 font-orbitron font-bold text-3xl">Por qué esta propuesta es comprable</h2>
+          <div class="mt-6 grid gap-4">
+            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
+              <p class="font-semibold">Menor riesgo de implementación</p>
+              <p class="mt-2 text-sm text-gray-400">Se evita comprar un paquete cerrado e inmaduro. Se escala con hitos y validación operativa.</p>
+            </div>
+            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
+              <p class="font-semibold">Flexibilidad frente a bases y escenarios</p>
+              <p class="mt-2 text-sm text-gray-400">La configuración cambia según infraestructura disponible, clima, superficie y misión.</p>
+            </div>
+            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
+              <p class="font-semibold">Justificación de costo-beneficio</p>
+              <p class="mt-2 text-sm text-gray-400">Más utilidad por misión, mejor persistencia y menor exposición de personal en tareas de alto riesgo.</p>
+            </div>
+            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
+              <p class="font-semibold">Base para crecimiento tecnológico</p>
+              <p class="mt-2 text-sm text-gray-400">Nuevos sensores, nuevos algoritmos y nuevas plataformas sin desarmar el núcleo del sistema.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-14 md:py-20">
+    <div class="max-w-7xl mx-auto px-5">
+      <div class="glass rounded-[2rem] p-8 md:p-10 text-center">
+        <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Cierre comercial</p>
+        <h2 class="mt-3 font-orbitron font-black text-3xl md:text-5xl leading-tight">Una inversión en capacidad estratégica, no una compra aislada de equipos.</h2>
+        <p class="mt-5 max-w-3xl mx-auto text-gray-300 leading-relaxed">La propuesta integra medios probados, inteligencia aplicada, comunicaciones resilientes y escalabilidad por módulos para construir una capacidad real de defensa, reconocimiento y vigilancia en entornos extremos.</p>
+        <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
+          <a href="#productos" class="px-6 py-3 rounded-2xl bg-neuro-green text-black font-orbitron font-bold text-sm hover:bg-white transition">Revisar lineup</a>
+          <a href="#implementacion" class="px-6 py-3 rounded-2xl border border-white/10 bg-white/5 text-white font-orbitron font-bold text-sm hover:border-neuro-green/40 hover:text-neuro-green transition">Revisar fases</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="video-modal" class="video-modal-backdrop hidden" aria-hidden="true">
+    <div class="video-modal-dialog">
+      <div class="flex items-center justify-between gap-4 px-5 py-4 border-b border-white/10">
+        <div class="min-w-0">
+          <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-green">Modo presentaci&oacute;n</p>
+          <h3 id="video-modal-title" class="mt-1 font-orbitron font-bold text-lg md:text-2xl truncate">Video</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="video-fullscreen-btn" type="button" class="px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-sm text-white hover:border-neuro-green/40 hover:text-neuro-green transition">Pantalla completa</button>
+          <button id="video-modal-close" type="button" class="w-11 h-11 rounded-xl border border-white/10 bg-white/5 text-xl leading-none hover:border-neuro-green/40 hover:text-neuro-green transition" aria-label="Cerrar visor">&times;</button>
+        </div>
+      </div>
+      <div class="p-4 md:p-5">
+        <div id="video-modal-stage" class="video-modal-stage rounded-[1.5rem] overflow-hidden border border-white/10">
+          <iframe id="video-modal-frame" src="about:blank" title="Video en grande" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <p id="video-modal-note" class="video-modal-note rounded-2xl px-4 py-3 text-sm text-gray-300"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      {
+        name: 'DJI Matrice 350 RTK',
+        category: 'UAV táctico multirrotor',
+        accent: 'green',
+        subtitle: 'Respuesta rápida, ISR y apoyo SAR con precisión RTK.',
+        image: 'https://www-cdn.djiits.com/dps/677d5da2fabdd4bb8c1f60c8e8109937.svg',
+        preview: 'https://img.youtube.com/vi/JPPHG5dSpwM/hqdefault.jpg',
+        video: 'https://www.youtube.com/embed/JPPHG5dSpwM',
+        bullets: [
+          'Hasta 55 min de vuelo',
+          'Protección IP55',
+          'Carga útil máxima 2,7 kg',
+          'Rango operativo publicado de -20 °C a 50 °C'
+        ],
+        use: 'Ideal para vigilancia táctica, inspección, reconocimiento cercano y apoyo en búsqueda y rescate.',
+        tags: ['EO/IR', 'RTK', 'Night Ops', 'ISR']
+      },
+      {
+        name: 'DeltaQuad Evo Tactical',
+        category: 'VTOL de largo alcance',
+        accent: 'blue',
+        subtitle: 'Cobertura extendida sin necesidad de pista preparada.',
+        image: 'https://a.storyblok.com/f/294510/1920x1280/547fb64d93/evo-section-2-image.png',
+        preview: 'https://img.youtube.com/vi/xJ2aFkWXlcE/hqdefault.jpg',
+        video: 'https://www.youtube.com/embed/xJ2aFkWXlcE',
+        bullets: [
+          'Hasta 230 km de rango máximo publicado',
+          'Hasta 225 min de autonomía publicada según configuración',
+          'Temperatura publicada de -20 °C a 45 °C',
+          'Diseñado para ISR, seguimiento y entrega liviana'
+        ],
+        use: 'Conviene cuando hay grandes áreas, infraestructura mínima y necesidad de despegue/aterrizaje vertical.',
+        tags: ['VTOL', 'ISR', 'ATAK', 'Thermal']
+      },
+      {
+        name: 'Windracers ULTRA',
+        category: 'Ala fija autónoma de gran carga',
+        accent: 'green',
+        subtitle: 'Carga pesada, gran alcance y utilidad dual para defensa y logística.',
+        image: 'https://windracers.com/wp-content/uploads/2024/12/Windracers-ULTRA-Parcel-Loading-1-copy.jpg.webp',
+        preview: 'https://img.youtube.com/vi/OO8RZYkZcx0/hqdefault.jpg',
+        video: 'https://www.youtube.com/embed/OO8RZYkZcx0',
+        bullets: [
+          'Más de 150 kg de carga útil publicada',
+          'Hasta 2.000 km de alcance publicado',
+          'Hasta 15 h de endurance publicada',
+          'Diseñado para operar en hielo y nieve con enfoque multi-misión'
+        ],
+        use: 'Aporta logística autónoma, investigación y misiones de largo alcance donde otros medios quedan limitados.',
+        tags: ['Heavy Lift', 'Autonomy', 'Cargo', 'Defence']
+      },
+      {
+        name: 'Saildrone Surveyor / Explorer',
+        category: 'USV de persistencia oceánica',
+        accent: 'blue',
+        subtitle: 'Monitoreo marítimo, seguridad y levantamiento de datos con muy alta persistencia.',
+        image: 'https://cdn.prod.website-files.com/653530fc2845a4410ac6dd36/6942968146e20c4d2f694ddf_mda-cta.avif',
+        preview: 'https://img.youtube.com/vi/hpTc3Yc4HrU/hqdefault.jpg',
+        video: 'https://www.youtube.com/embed/hpTc3Yc4HrU',
+        bullets: [
+          'Explorer: vehículo de 23 pies impulsado por viento y energía solar',
+          'Misiones de hasta 12 meses publicadas por Saildrone',
+          'Surveyor equipado para ocean mapping y acústica avanzada',
+          'Operaciones desde el Ártico hasta la Antártida'
+        ],
+        use: 'Resuelve persistencia oceánica, dominio marítimo, monitoreo ambiental y batimetría con menor riesgo humano.',
+        tags: ['USV', 'Ocean Data', 'MDA', 'Survey']
+      }
+    ];
+
+    function tagClass(accent) {
+      return accent === 'green'
+        ? 'text-neuro-green border-neuro-green/30 bg-neuro-green/10'
+        : 'text-neuro-blue2 border-neuro-blue2/30 bg-neuro-blue/10';
+    }
+
+    function getVideoId(url) {
+      const match = url.match(/(?:embed\/|watch\?v=|youtu\.be\/)([\w-]{11})/);
+      return match ? match[1] : '';
+    }
+
+    function getEmbedUrl(videoId) {
+      const params = new URLSearchParams({
+        autoplay: '1',
+        rel: '0',
+        modestbranding: '1',
+        playsinline: '1'
+      });
+      return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+    }
+
+    function escapeAttr(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    const prefersLocalPresentationMode = window.location.protocol === 'file:';
+    const normalizedProducts = products.map(product => {
+      const videoId = getVideoId(product.video);
+      return {
+        ...product,
+        videoId
+      };
+    });
+
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = normalizedProducts.map((p, i) => `
+      <article class="glass rounded-[2rem] p-5 md:p-7 overflow-hidden">
+        <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-6 items-start">
+          <div class="${i % 2 === 1 ? 'lg:order-2' : ''}">
+            <div class="rounded-[1.5rem] overflow-hidden border border-white/10 bg-[#08080b]">
+              <img src="${p.image}" alt="${p.name}" class="w-full h-[220px] md:h-[280px] object-cover opacity-90">
+            </div>
+            <div class="mt-4 video-showcase">
+              <button
+                type="button"
+                class="video-preview group"
+                data-video-mode="modal"
+                data-video-id="${p.videoId}"
+                data-video-title="${escapeAttr(p.name)}"
+              >
+                <img src="${p.preview}" alt="Vista previa de ${p.name}">
+                <div class="video-preview-overlay">
+                  <div class="flex items-start justify-between gap-3">
+                    <span class="inline-flex px-3 py-1.5 rounded-full text-[11px] font-orbitron tracking-[0.18em] uppercase border ${tagClass(p.accent)}">Video del producto</span>
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/30 text-[11px] uppercase tracking-[0.16em] text-gray-200">
+                      Reproducci&oacute;n integrada
+                    </span>
+                  </div>
+                  <div class="flex items-end justify-between gap-4">
+                    <div>
+                      <p class="font-orbitron text-xl md:text-2xl font-bold">${p.name}</p>
+                      <p class="mt-2 max-w-xl text-sm text-gray-200">${p.subtitle}</p>
+                    </div>
+                    <span class="video-play shrink-0" aria-hidden="true">
+                      <span class="video-icon-play"></span>
+                    </span>
+                  </div>
+                </div>
+              </button>
+              <div class="video-actions">
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-neuro-green text-black font-orbitron font-bold text-xs hover:bg-white transition"
+                  data-video-mode="inline"
+                  data-video-id="${p.videoId}"
+                  data-video-title="${escapeAttr(p.name)}"
+                >
+                  Reproducir aqu&iacute;
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border border-white/10 bg-white/5 text-white font-orbitron font-bold text-xs hover:border-neuro-green/40 hover:text-neuro-green transition"
+                  data-video-mode="modal"
+                  data-video-id="${p.videoId}"
+                  data-video-title="${escapeAttr(p.name)}"
+                >
+                  Presentar en grande
+                </button>
+              </div>
+              <div class="video-inline hidden">
+                <div class="video-frame">
+                  <iframe class="video-inline-frame w-full h-full" src="about:blank" title="Reproductor integrado de ${p.name}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="${i % 2 === 1 ? 'lg:order-1' : ''}">
+            <div class="inline-flex px-3 py-1.5 rounded-full text-[11px] font-orbitron tracking-[0.18em] uppercase border ${tagClass(p.accent)}">${p.category}</div>
+            <h3 class="mt-4 font-orbitron font-bold text-2xl md:text-4xl leading-tight">${p.name}</h3>
+            <p class="mt-3 text-gray-300 text-base md:text-lg">${p.subtitle}</p>
+            <p class="mt-4 text-sm text-gray-400 leading-relaxed">${p.use}</p>
+
+            <div class="mt-5 grid sm:grid-cols-2 gap-3">
+              ${p.bullets.map(b => `<div class="spec-pill rounded-2xl p-4 text-sm text-gray-200">${b}</div>`).join('')}
+            </div>
+
+            <div class="mt-5 flex flex-wrap gap-2">
+              ${p.tags.map(t => `<span class="px-3 py-1.5 rounded-full text-xs border border-white/10 bg-white/5 text-gray-300">${t}</span>`).join('')}
+            </div>
+
+            <div class="mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/5 to-transparent p-5">
+              <p class="font-orbitron text-[11px] tracking-[0.16em] uppercase ${p.accent === 'green' ? 'text-neuro-green' : 'text-neuro-blue2'}">Encaje dentro del sistema</p>
+              <p class="mt-2 text-sm text-gray-400">Se integra con navegación precisa, sensores especializados, enlaces de misión y una capa de IA desplegable en edge computing o estación táctica.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    const modal = document.getElementById('video-modal');
+    const modalDialog = modal.querySelector('.video-modal-dialog');
+    const modalTitle = document.getElementById('video-modal-title');
+    const modalFrame = document.getElementById('video-modal-frame');
+    const modalNote = document.getElementById('video-modal-note');
+    const modalClose = document.getElementById('video-modal-close');
+    const modalFullscreen = document.getElementById('video-fullscreen-btn');
+
+    function stopInlinePlayers(exceptFrame = null) {
+      document.querySelectorAll('.video-inline').forEach(container => {
+        const frame = container.querySelector('.video-inline-frame');
+        if (!frame || frame === exceptFrame) return;
+        frame.src = 'about:blank';
+        container.classList.add('hidden');
+      });
+    }
+
+    function openInlineVideo(videoId, trigger) {
+      if (!videoId) return;
+      const showcase = trigger.closest('.video-showcase');
+      if (!showcase) return;
+
+      const inlineContainer = showcase.querySelector('.video-inline');
+      const inlineFrame = showcase.querySelector('.video-inline-frame');
+      if (!inlineContainer || !inlineFrame) return;
+
+      const nextSrc = getEmbedUrl(videoId);
+      const isSameVideo = inlineFrame.dataset.videoId === videoId;
+      const isOpen = !inlineContainer.classList.contains('hidden') && isSameVideo;
+
+      if (isOpen) {
+        inlineFrame.src = 'about:blank';
+        inlineFrame.dataset.videoId = '';
+        inlineContainer.classList.add('hidden');
+        return;
+      }
+
+      stopInlinePlayers(inlineFrame);
+      inlineFrame.src = nextSrc;
+      inlineFrame.dataset.videoId = videoId;
+      inlineContainer.classList.remove('hidden');
+    }
+
+    function openVideoModal(videoId, title) {
+      if (!videoId) return;
+
+      stopInlinePlayers();
+      modalTitle.textContent = title;
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      modalFrame.src = getEmbedUrl(videoId);
+      modalNote.innerHTML = prefersLocalPresentationMode
+        ? 'Si el navegador muestra Error 153 al abrir el HTML como archivo local, servilo por localhost para que YouTube reciba el referer correcto sin salir de la landing.'
+        : 'El video se reproduce dentro de la misma landing y pod&eacute;s ampliarlo a pantalla completa.';
+    }
+
+    function closeVideoModal() {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      modalFrame.src = 'about:blank';
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    grid.addEventListener('click', event => {
+      const trigger = event.target.closest('button[data-video-id]');
+      if (!trigger) return;
+
+      if ((trigger.dataset.videoMode || 'modal') === 'inline') {
+        openInlineVideo(trigger.dataset.videoId, trigger);
+        return;
+      }
+
+      openVideoModal(
+        trigger.dataset.videoId,
+        trigger.dataset.videoTitle || 'Video'
+      );
+    });
+
+    modalClose.addEventListener('click', closeVideoModal);
+    modal.addEventListener('click', event => {
+      if (event.target === modal) {
+        closeVideoModal();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeVideoModal();
+      }
+    });
+
+    modalFullscreen.addEventListener('click', async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+          return;
+        }
+        await modalDialog.requestFullscreen();
+      } catch (error) {
+        console.warn('No se pudo activar pantalla completa', error);
+      }
+    });
+  </script>
+</body>
+</html>
