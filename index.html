@@ -1464,28 +1464,6 @@
       }
     }
 
-    footer {
-      padding: 28px 0 58px;
-      color: var(--muted);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 22px;
-      padding-top: 22px;
-      border-top: 1px solid var(--line);
-    }
-
-    .source-links {
-      display: grid;
-      gap: 10px;
-    }
-
-    .source-links a {
-      color: var(--text);
-    }
-
     .reveal {
       opacity: 0;
       transform: translateY(18px);
@@ -1534,8 +1512,7 @@
       .modular-overview,
       .module-stage,
       .conversion-strip,
-      .quote-card,
-      .footer-grid {
+      .quote-card {
         grid-template-columns: 1fr;
       }
 
@@ -1780,7 +1757,7 @@
           <h3>Del registro remoto a la comprensión operativa</h3>
           <ul class="signal-list">
             <li>La misión deja de depender de revisar el material horas después del vuelo.</li>
-            <li>La plataforma reconoce grietas ocultas, growlers, calor humano y señales del hielo dentro del mismo ciclo operativo.</li>
+            <li>La plataforma reconoce grietas ocultas, bloques de hielo semisumergidos, calor humano y señales del hielo dentro del mismo ciclo operativo.</li>
             <li>El hallazgo aparece georreferenciado y listo para coordinar patrullas, rescate o navegación.</li>
           </ul>
         </article>
@@ -1792,7 +1769,7 @@
           <h3>Las señales que realmente importan en el continente blanco</h3>
           <ul class="signal-list">
             <li>Puentes de nieve y grietas subglaciales invisibles desde el exterior.</li>
-            <li>Growlers semisumergidos que condicionan desembarcos y maniobras navales.</li>
+            <li>Bloques de hielo semisumergidos que condicionan desembarcos y maniobras navales.</li>
             <li>Firmas térmicas humanas en whiteout, rutas seguras y lectura del hielo marino.</li>
           </ul>
         </article>
@@ -1809,7 +1786,7 @@
         <article class="media-card reveal-right">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Iceberg_in_the_Arctic_with_its_underside_exposed.jpg/1280px-Iceberg_in_the_Arctic_with_its_underside_exposed.jpg" alt="Growler o bloque de hielo semisumergido en aguas antárticas">
           <div class="media-card-body">
-            <strong>Growlers en navegación</strong>
+            <strong>Hielo semisumergido en navegación</strong>
             <p>La percepción avanzada suma lectura visual allí donde los radares navales no alcanzan.</p>
           </div>
         </article>
@@ -2258,12 +2235,12 @@
             </p>
             <div class="module-stage-badges">
               <span>Pack Ice</span>
-              <span>Growlers</span>
+              <span>Hielo semisumergido</span>
             </div>
             <ul class="bullet-list">
               <li>Detección instantánea de grietas glaciares tapadas por nieve para patrullas terrestres.</li>
               <li>Navegación antártica con mapeo de densidad del hielo marino para apoyar al ARA Almirante Irízar.</li>
-              <li>Seguridad de desembarco mediante detección de growlers invisibles a radares navales.</li>
+              <li>Seguridad de desembarco mediante detección de bloques de hielo semisumergidos invisibles a radares navales.</li>
               <li>Inspección de techos, tensores y paneles solares sin exponer operarios a trabajos en altura.</li>
             </ul>
           </div>
@@ -2444,26 +2421,6 @@
       </article>
     </section>
   </main>
-
-  <footer class="shell">
-    <div class="footer-grid">
-      <div>
-        <strong>Base narrativa</strong>
-        <p>
-          Esta landing fue desarrollada exclusivamente a partir del contenido del documento
-          <em>Ecosistema de Inteligencia Artificial Autónoma para Operaciones Antárticas.docx</em>,
-          reorganizando sus puntos críticos para una presentación comercial y ejecutiva.
-        </p>
-      </div>
-      <div class="source-links">
-        <strong>Fuentes visuales utilizadas</strong>
-        <a href="https://www.argentina.gob.ar/noticias/el-rompehielos-ara-almirante-irizar-reabastecio-la-base-antartica-conjunta-marambio" target="_blank" rel="noreferrer">Argentina.gob.ar | ARA Almirante Irízar en campaña antártica</a>
-        <a href="https://www.antarctica.gov.au/antarctic-operations/travel-and-logistics/aviation/drones-in-antarctica/" target="_blank" rel="noreferrer">Australian Antarctic Program | Drones in Antarctica</a>
-        <a href="https://es.innovando.news/Ping%C3%BCinos-y-monitoreo-de-giros-inteligentes-en-la-Ant%C3%A1rtida/" target="_blank" rel="noreferrer">Innovando News / ENEA | Monitoreo de pingüinos con drones e IA</a>
-        <a href="https://commons.wikimedia.org/wiki/File:AntarcticaDomeCSnowPetrel.jpg" target="_blank" rel="noreferrer">Wikimedia Commons / NASA | Entorno glaciar y grietas</a>
-      </div>
-    </div>
-  </footer>
 
   <script>
     const observer = new IntersectionObserver(
