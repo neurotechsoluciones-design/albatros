@@ -1,1235 +1,2531 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <title>Sistema Modular de Drones + IA para Defensa</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Ecosistema de Inteligencia Artificial Autónoma para Operaciones Antárticas</title>
+  <meta
+    name="description"
+    content="Landing comercial para presentar un ecosistema de inteligencia artificial autónoma, plataformas no tripuladas y explotación soberana de datos para operaciones antárticas."
+  >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            neuro: {
-              black: '#040404',
-              dark: '#0B0B0F',
-              panel: 'rgba(255,255,255,0.04)',
-              line: 'rgba(255,255,255,0.10)',
-              green: '#9AFF5F',
-              blue: '#2100E5',
-              blue2: '#5C42FF'
-            }
-          },
-          fontFamily: {
-            orbitron: ['Orbitron', 'sans-serif'],
-            inter: ['Inter', 'sans-serif']
-          },
-          boxShadow: {
-            glow: '0 0 40px rgba(154,255,95,0.12)',
-            blueglow: '0 0 40px rgba(33,0,229,0.20)'
-          },
-          keyframes: {
-            floaty: {
-              '0%,100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-8px)' }
-            },
-            shine: {
-              '0%': { backgroundPosition: '0% 50%' },
-              '100%': { backgroundPosition: '200% 50%' }
-            },
-            sweep: {
-              '0%': { transform: 'translate3d(-120%, 0, 0) rotate(18deg)' },
-              '100%': { transform: 'translate3d(260%, 0, 0) rotate(18deg)' }
-            },
-            scanline: {
-              '0%, 100%': { transform: 'translateY(-8%)', opacity: '0.18' },
-              '50%': { transform: 'translateY(108%)', opacity: '0.42' }
-            }
-          },
-          animation: {
-            floaty: 'floaty 6s ease-in-out infinite',
-            shine: 'shine 10s linear infinite',
-            sweep: 'sweep 8s linear infinite',
-            scanline: 'scanline 5.5s ease-in-out infinite'
-          }
-        }
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --bg-2: #ffffff;
+      --panel: rgba(255, 255, 255, 0.78);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --line: rgba(17, 36, 63, 0.08);
+      --line-strong: rgba(17, 36, 63, 0.16);
+      --text: #0d1626;
+      --muted: #5e708a;
+      --accent: #2f6bff;
+      --accent-2: #08d1a0;
+      --shadow: 0 28px 80px rgba(15, 23, 39, 0.08);
+      --shadow-soft: 0 18px 50px rgba(15, 23, 39, 0.06);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 20px;
+      --max: 1240px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #06101a;
+        --bg-2: #0b1624;
+        --panel: rgba(12, 22, 36, 0.72);
+        --panel-strong: rgba(10, 18, 29, 0.88);
+        --line: rgba(197, 219, 240, 0.10);
+        --line-strong: rgba(197, 219, 240, 0.18);
+        --text: #edf5fc;
+        --muted: #a7bdd1;
+        --accent: #69a3ff;
+        --accent-2: #34e3bb;
+        --shadow: 0 28px 80px rgba(0, 0, 0, 0.30);
+        --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.22);
       }
     }
-  </script>
-  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
-      background: #040404;
-      color: white;
+      margin: 0;
+      color: var(--text);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(47, 107, 255, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(8, 209, 160, 0.08), transparent 20%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       overflow-x: hidden;
     }
-    .grid-bg {
-      background-size: 42px 42px;
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
       background-image:
-        linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+        linear-gradient(rgba(110, 134, 164, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(110, 134, 164, 0.08) 1px, transparent 1px);
+      background-size: 84px 84px;
       mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
       -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 100%);
+      opacity: 0.52;
+      z-index: -1;
     }
-    .glass {
-      background: rgba(10,10,14,0.72);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.08);
+
+    img {
+      display: block;
+      max-width: 100%;
     }
-    .grad-text {
-      background: linear-gradient(90deg, #ffffff 0%, #9AFF5F 35%, #7B68FF 70%, #ffffff 100%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
-    .video-frame {
-      aspect-ratio: 16 / 9;
-      width: 100%;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 1rem;
-      overflow: hidden;
-      background: #09090b;
+
+    .shell {
+      width: min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
     }
-    .video-showcase {
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 1.5rem;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(92,66,255,0.12), rgba(4,4,4,0.92)),
-        #09090b;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding-top: 14px;
     }
-    .tech-shell {
-      position: relative;
-      isolation: isolate;
-    }
-    .tech-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.03), transparent 28%, transparent 72%, rgba(92,66,255,0.10)),
-        radial-gradient(circle at top right, rgba(154,255,95,0.10), transparent 34%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .tech-shell::after {
-      content: "";
-      position: absolute;
-      top: -35%;
-      left: -20%;
-      width: 36%;
-      height: 170%;
-      background: linear-gradient(90deg, transparent, rgba(154,255,95,0.16), rgba(92,66,255,0.18), transparent);
-      filter: blur(18px);
-      opacity: 0.7;
-      pointer-events: none;
-      animation: sweep 8s linear infinite;
-      z-index: 0;
-    }
-    .tech-shell > * {
-      position: relative;
-      z-index: 1;
-    }
-    .tech-media {
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top right, rgba(92,66,255,0.18), transparent 40%),
-        #08080b;
-    }
-    .tech-carousel {
-      position: relative;
-      min-height: 220px;
-    }
-    .tech-carousel-stage {
-      position: relative;
-      min-height: inherit;
-    }
-    .tech-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transform: scale(1.03);
-      transition: opacity 700ms ease, transform 1200ms ease;
-    }
-    .tech-slide.is-active {
-      opacity: 1;
-      transform: scale(1);
-      z-index: 2;
-    }
-    .tech-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .tech-carousel-dots {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      display: flex;
-      gap: 0.45rem;
-      z-index: 4;
-    }
-    .tech-carousel-dot {
-      width: 0.7rem;
-      height: 0.7rem;
-      border-radius: 9999px;
-      border: 1px solid rgba(255,255,255,0.25);
-      background: rgba(255,255,255,0.12);
-      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
-    }
-    .tech-carousel-dot.is-active {
-      background: #9AFF5F;
-      border-color: rgba(154,255,95,0.7);
-      transform: scale(1.15);
-    }
-    .tech-media::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .tech-media::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 22%;
-      background: linear-gradient(180deg, rgba(154,255,95,0), rgba(154,255,95,0.12), rgba(92,66,255,0.18), rgba(154,255,95,0));
-      filter: blur(8px);
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 2;
-      animation: scanline 5.5s ease-in-out infinite;
-    }
-    .tech-image-tag {
-      position: absolute;
-      left: 1rem;
-      right: 1rem;
-      bottom: 1rem;
+
+    .topbar-inner {
+      width: min(var(--max), calc(100% - 36px));
+      margin: 0 auto;
+      padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      padding: 0.85rem 1rem;
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 1rem;
-      background: linear-gradient(180deg, rgba(4,4,6,0.72), rgba(4,4,6,0.92));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      z-index: 3;
+      gap: 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.60);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-soft);
     }
-    .tech-dot {
-      width: 0.8rem;
-      height: 0.8rem;
-      border-radius: 9999px;
-      background: #9AFF5F;
-      box-shadow: 0 0 0 0 rgba(154,255,95,0.45);
-      animation: pulse 2.8s ease-out infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(154,255,95,0.45); }
-      70% { box-shadow: 0 0 0 14px rgba(154,255,95,0); }
-      100% { box-shadow: 0 0 0 0 rgba(154,255,95,0); }
-    }
-    .presenter-dock {
-      background: linear-gradient(180deg, rgba(10,10,14,0.92), rgba(4,4,6,0.96));
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 28px 90px rgba(0,0,0,0.38);
-    }
-    .presenter-chip[aria-current="true"] {
-      border-color: rgba(154,255,95,0.45);
-      color: #9AFF5F;
-      background: rgba(154,255,95,0.10);
-    }
-    .presenter-chip {
-      transition: border-color 220ms ease, color 220ms ease, background 220ms ease, transform 220ms ease;
-    }
-    .presenter-chip:hover {
-      transform: translateY(-1px);
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .tech-shell::after,
-      .tech-media::after,
-      .tech-dot,
-      .animate-floaty,
-      .animate-shine {
-        animation: none !important;
-      }
-      .tech-slide,
-      .video-preview img {
-        transition: none !important;
+
+    @media (prefers-color-scheme: dark) {
+      .topbar-inner {
+        background: rgba(6, 15, 26, 0.62);
       }
     }
-    .video-preview {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      background: #09090b;
-      cursor: pointer;
-    }
-    .video-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.82;
-      transform: scale(1.01);
-      transition: transform 300ms ease, opacity 300ms ease;
-    }
-    .video-preview:hover img,
-    .video-preview:focus-visible img {
-      transform: scale(1.06);
-      opacity: 0.96;
-    }
-    .video-preview-overlay {
-      position: absolute;
-      inset: 0;
+
+    .brand {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 1.25rem;
-      background:
-        linear-gradient(180deg, rgba(4,4,4,0.16) 0%, rgba(4,4,4,0.2) 30%, rgba(4,4,4,0.84) 100%);
+      gap: 3px;
     }
-    .video-play {
-      width: 4.5rem;
-      height: 4.5rem;
+
+    .brand strong,
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    .brand strong {
+      font-size: 0.98rem;
+    }
+
+    .brand span,
+    .nav a {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(47, 107, 255, 0.08);
+      border: 1px solid rgba(47, 107, 255, 0.10);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(47, 107, 255, 0.28);
+    }
+
+    .hero {
+      padding: 88px 0 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
+      gap: 34px;
+      align-items: center;
+    }
+
+    .project-intro {
+      padding-top: 52px;
+    }
+
+    .project-banner {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(340px, 0.98fr) minmax(0, 1.02fr);
+      gap: 0;
+      border-radius: calc(var(--radius-xl) + 2px);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(47, 107, 255, 0.1), transparent 24%),
+        linear-gradient(180deg, rgba(7, 17, 29, 0.96), rgba(10, 22, 36, 0.92));
+    }
+
+    .project-banner-media {
+      position: relative;
+      min-height: 400px;
+      border-left: 1px solid var(--line);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(8, 209, 160, 0.18), transparent 18%),
+        radial-gradient(circle at 50% 58%, rgba(47, 107, 255, 0.18), transparent 36%),
+        linear-gradient(180deg, #08111c, #0d1a28);
+      display: grid;
+      place-items: center;
+      padding: 34px 34px 56px;
+    }
+
+    .project-banner-media img {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 520px);
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      display: block;
+      border-radius: 24px;
+      border: 1px solid rgba(154, 180, 214, 0.14);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      box-shadow:
+        0 34px 80px rgba(3, 10, 22, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+      filter: saturate(1.12) contrast(1.08);
+      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+      animation: albatrosFloat 8.5s ease-in-out infinite;
+    }
+
+    .project-banner-media::before {
+      content: "";
+      position: absolute;
+      inset: 11% 10% 12%;
+      z-index: 0;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at center, rgba(8, 209, 160, 0.24), transparent 24%),
+        radial-gradient(circle at center, rgba(47, 107, 255, 0.18), transparent 48%);
+      filter: blur(30px);
+      pointer-events: none;
+      animation: albatrosGlow 10s ease-in-out infinite;
+    }
+
+    .project-banner-media::after {
+      content: "";
+      position: absolute;
+      top: -12%;
+      bottom: -12%;
+      left: -32%;
+      width: 56%;
+      z-index: 1;
+      background: linear-gradient(90deg, transparent, rgba(143, 192, 255, 0.14), transparent);
+      transform: skewX(-18deg) translateX(-120%);
+      filter: blur(10px);
+      pointer-events: none;
+      animation: albatrosSweep 12s ease-in-out infinite;
+    }
+
+    .project-banner-copy {
+      padding: 34px 36px;
+      display: grid;
+      align-content: center;
+      gap: 10px;
+    }
+
+    .project-banner-copy h2 {
+      margin: 0;
+      font-size: clamp(1.82rem, 3vw, 2.78rem);
+      line-height: 1.02;
+      max-width: 14ch;
+    }
+
+    .project-banner-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 54ch;
+      font-size: 0.98rem;
+    }
+
+    .project-banner-notes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .project-banner-notes span {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(109, 161, 255, 0.34);
+      background: linear-gradient(180deg, rgba(23, 43, 71, 0.9), rgba(15, 30, 50, 0.92));
+      color: #8fc0ff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @keyframes albatrosGlow {
+      0%,
+      100% {
+        transform: scale(0.92);
+        opacity: 0.72;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    @keyframes albatrosFloat {
+      0%,
+      100% {
+        transform: perspective(1200px) rotateY(-5deg) rotateX(2deg) translate3d(0, 0, 0);
+      }
+      50% {
+        transform: perspective(1200px) rotateY(-3deg) rotateX(0deg) translate3d(0, -10px, 0);
+      }
+    }
+
+    @keyframes albatrosSweep {
+      0%,
+      18% {
+        transform: skewX(-18deg) translateX(-120%);
+        opacity: 0;
+      }
+      32% {
+        opacity: 1;
+      }
+      52% {
+        transform: skewX(-18deg) translateX(300%);
+        opacity: 0.9;
+      }
+      100% {
+        transform: skewX(-18deg) translateX(300%);
+        opacity: 0;
+      }
+    }
+
+    .hero-copy {
+      max-width: 640px;
+    }
+
+    .hero-copy h1 {
+      margin: 18px 0 16px;
+      font-size: clamp(2.45rem, 5vw, 4.6rem);
+      line-height: 1;
+      max-width: 9.5ch;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      max-width: 58ch;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 9999px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.10);
+      gap: 12px;
+      padding: 15px 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent), #1f90ff);
+      box-shadow: 0 18px 40px rgba(47, 107, 255, 0.22);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.48);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .button-secondary {
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+
+    .hero-ribbon {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card,
+    .hero-metric,
+    .media-card,
+    .section-card,
+    .pillar-card,
+    .pillar-panel,
+    .module-stage,
+    .metric-card,
+    .module-card,
+    .benefit-card,
+    .quote-card,
+    .timeline-card {
+      position: relative;
+      overflow: hidden;
+      --spot-x: 50%;
+      --spot-y: 50%;
+      border: 1px solid var(--line);
+      background: var(--panel);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
-      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
     }
-    .video-preview:hover .video-play,
-    .video-preview:focus-visible .video-play {
-      transform: scale(1.06);
-      background: rgba(154,255,95,0.20);
-      border-color: rgba(154,255,95,0.45);
-    }
-    .video-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      padding: 1rem 1.25rem 1.25rem;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-    }
-    .video-inline {
-      padding: 0 1.25rem 1.25rem;
-      background: rgba(255,255,255,0.03);
-    }
-    .video-inline.hidden {
-      display: none;
-    }
-    .video-modal-backdrop {
-      position: fixed;
+
+    .card::after,
+    .hero-metric::after,
+    .media-card::after,
+    .section-card::after,
+    .pillar-card::after,
+    .pillar-panel::after,
+    .module-stage::after,
+    .metric-card::after,
+    .module-card::after,
+    .benefit-card::after,
+    .quote-card::after,
+    .timeline-card::after {
+      content: "";
+      position: absolute;
       inset: 0;
-      z-index: 80;
+      background:
+        radial-gradient(420px circle at var(--spot-x) var(--spot-y), rgba(47, 107, 255, 0.14), transparent 34%),
+        radial-gradient(280px circle at calc(var(--spot-x) + 10%) calc(var(--spot-y) - 12%), rgba(8, 209, 160, 0.08), transparent 30%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .card:hover,
+    .hero-metric:hover,
+    .media-card:hover,
+    .section-card:hover,
+    .pillar-card:hover,
+    .pillar-panel:hover,
+    .module-stage:hover,
+    .metric-card:hover,
+    .module-card:hover,
+    .benefit-card:hover,
+    .timeline-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--line-strong);
+      box-shadow: 0 24px 60px rgba(15, 23, 39, 0.11);
+    }
+
+    .card:hover::after,
+    .hero-metric:hover::after,
+    .media-card:hover::after,
+    .section-card:hover::after,
+    .pillar-card:hover::after,
+    .pillar-panel:hover::after,
+    .module-stage:hover::after,
+    .metric-card:hover::after,
+    .module-card:hover::after,
+    .benefit-card:hover::after,
+    .timeline-card:hover::after {
+      opacity: 1;
+    }
+
+    .icon-chip {
+      width: 54px;
+      height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.44);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+    }
+
+    .icon-chip img {
+      width: 28px;
+      height: 28px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .icon-chip {
+        background: rgba(255, 255, 255, 0.03);
+        box-shadow: none;
+      }
+    }
+
+    .hero-metric {
+      padding: 22px;
+      min-height: 168px;
+    }
+
+    .hero-metric strong {
+      display: block;
+      margin: 16px 0 8px;
+      font-size: 1.16rem;
+    }
+
+    .hero-metric p,
+    .section-card p,
+    .pillar-card p,
+    .metric-card p,
+    .module-card p,
+    .benefit-card p,
+    .quote-card p,
+    .timeline-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.78;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 680px;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(19, 39, 66, 0.14), rgba(255, 255, 255, 0.08));
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(47, 107, 255, 0.18), transparent 34%),
+        linear-gradient(180deg, transparent, rgba(5, 16, 27, 0.56));
+      z-index: 1;
+    }
+
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: translate3d(0, var(--hero-image-shift, 0px), 0) scale(1.035);
+      transition: transform 160ms linear;
+      will-change: transform;
+    }
+
+    .hero-stack {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      z-index: 2;
+      display: grid;
+      gap: 14px;
+      transform: translate3d(0, var(--hero-stack-shift, 0px), 0);
+      transition: transform 160ms linear;
+      will-change: transform;
+    }
+
+    .hero-note {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.66);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-note small {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-note strong {
+      display: block;
+      font-size: 1.08rem;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .hero-note span {
+      color: var(--muted);
+      line-height: 1.62;
+      font-size: 0.95rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .hero-note {
+        background: rgba(7, 18, 30, 0.70);
+      }
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .section-head {
+      margin-bottom: 28px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(2.3rem, 4vw, 3.9rem);
+      line-height: 1.02;
+      max-width: 14ch;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 78ch;
+      color: var(--muted);
+      line-height: 1.84;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .media-card {
+      overflow: hidden;
+    }
+
+    .media-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .media-card-body {
+      padding: 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .media-card-body strong {
+      font-size: 1.02rem;
+    }
+
+    .media-card-body p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .section-card {
+      padding: 28px;
+    }
+
+    .section-card h3,
+    .pillar-card h3,
+    .metric-card h3,
+    .module-card h3,
+    .benefit-card h3 {
+      margin: 16px 0 10px;
+      font-size: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .signal-list,
+    .bullet-list {
+      list-style: none;
+      margin: 18px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .signal-list li,
+    .bullet-list li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .signal-list li::before,
+    .bullet-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-2);
+    }
+
+    .support-media {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      min-height: 100%;
+      background: var(--panel-strong);
+    }
+
+    .support-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .metric-card {
+      padding: 22px;
+    }
+
+    .metric-card strong {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 1.56rem;
+      line-height: 1;
+      font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    .metric-card span {
+      color: var(--text);
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .compare-showcase {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 28px;
+    }
+
+    .compare-stage {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: var(--panel-strong);
+      box-shadow: var(--shadow);
+    }
+
+    .compare-stage img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .compare-stage .compare-overlay {
+      position: absolute;
+      inset: 0;
+      width: var(--compare-position, 58%);
+      overflow: hidden;
+      border-right: 1px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .compare-stage .compare-overlay img {
+      width: calc(100vw * 0 + 100%);
+      min-width: 100%;
+    }
+
+    .compare-stage .compare-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--compare-position, 58%);
+      width: 1px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 0 0 1px rgba(47, 107, 255, 0.18);
+      transform: translateX(-0.5px);
+    }
+
+    .compare-stage .compare-handle {
+      position: absolute;
+      left: var(--compare-position, 58%);
+      top: 50%;
+      width: 52px;
+      height: 52px;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 16px 30px rgba(15, 23, 39, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.25rem;
-      background: rgba(2,4,8,0.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 700;
     }
-    .video-modal-backdrop.hidden {
-      display: none;
+
+    .compare-stage .compare-label {
+      position: absolute;
+      top: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(7, 18, 30, 0.52);
+      color: #ffffff;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 0.77rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      font-weight: 700;
+      z-index: 2;
     }
-    .video-modal-dialog {
-      width: min(1120px, 100%);
-      border-radius: 1.75rem;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.12);
-      background:
-        radial-gradient(circle at top, rgba(92,66,255,0.18), transparent 42%),
-        linear-gradient(180deg, rgba(16,16,22,0.98), rgba(4,4,6,0.98));
-      box-shadow: 0 45px 140px rgba(0,0,0,0.48);
+
+    .compare-stage .compare-label.left {
+      left: 18px;
     }
-    .video-modal-stage {
-      aspect-ratio: 16 / 9;
+
+    .compare-stage .compare-label.right {
+      right: 18px;
+    }
+
+    .compare-slider {
       width: 100%;
-      background: #050505;
+      margin-top: 18px;
+      appearance: none;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(47, 107, 255, 0.18), rgba(8, 209, 160, 0.16));
+      outline: none;
     }
-    .video-modal-stage iframe,
-    .video-modal-stage img {
+
+    .compare-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(47, 107, 255, 0.12);
+      cursor: ew-resize;
+    }
+
+    .compare-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(47, 107, 255, 0.12);
+      cursor: ew-resize;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .pillar-card {
+      padding: 22px;
+      min-height: 100%;
+    }
+
+    .pillar-showcase {
+      display: grid;
+      gap: 22px;
+      padding: 30px;
+      border-radius: calc(var(--radius-xl) + 4px);
+      border: 1px solid rgba(126, 160, 212, 0.18);
+      background:
+        radial-gradient(circle at top left, rgba(47, 107, 255, 0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(8, 209, 160, 0.12), transparent 18%),
+        linear-gradient(180deg, #07111c 0%, #091624 58%, #0a1828 100%);
+      box-shadow: 0 36px 88px rgba(4, 12, 24, 0.34);
+      overflow: hidden;
+    }
+
+    .pillar-showcase .tag {
+      color: #8cc8ff;
+    }
+
+    .pillar-showcase .tag::before {
+      background: linear-gradient(135deg, #2f6bff, #08d1a0);
+    }
+
+    .pillar-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 22px;
+      padding: 26px;
+      border-radius: 28px;
+      border: 1px solid rgba(154, 180, 214, 0.14);
+      background:
+        linear-gradient(180deg, rgba(8, 18, 31, 0.94), rgba(9, 19, 31, 0.86)),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 30%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .pillar-panel:hover {
+      border-color: rgba(140, 200, 255, 0.28);
+      box-shadow:
+        0 34px 92px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .pillar-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .pillar-panel-vertical {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .pillar-copy {
+      display: grid;
+      align-content: center;
+      gap: 14px;
+    }
+
+    .pillar-copy h3 {
+      margin: 0;
+      color: #f3f8ff;
+      font-size: clamp(1.65rem, 2.5vw, 2.55rem);
+      line-height: 1.02;
+      max-width: 14ch;
+    }
+
+    .pillar-copy p {
+      margin: 0;
+      color: rgba(228, 237, 247, 0.78);
+      line-height: 1.82;
+    }
+
+    .pillar-media-frame {
+      position: relative;
+      min-height: 320px;
+      overflow: hidden;
+      border-radius: 24px;
+      border: 1px solid rgba(160, 184, 214, 0.12);
+      background:
+        radial-gradient(circle at top, rgba(47, 107, 255, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(5, 11, 18, 0.98), rgba(8, 15, 24, 0.94));
+    }
+
+    .pillar-media-frame img {
       width: 100%;
       height: 100%;
-      border: 0;
       object-fit: cover;
+      display: block;
     }
-    .video-modal-note {
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.04);
+
+    .pillar-media-product img {
+      object-fit: contain;
+      padding: 30px;
+      background:
+        radial-gradient(circle at center, rgba(10, 209, 160, 0.16), transparent 34%),
+        linear-gradient(180deg, #04070d, #08101a);
     }
-    .video-icon-play {
-      width: 0;
-      height: 0;
-      margin-left: 0.18rem;
-      border-top: 0.7rem solid transparent;
-      border-bottom: 0.7rem solid transparent;
-      border-left: 1.15rem solid white;
+
+    .pillar-media-sensor {
+      position: relative;
+      min-height: 360px;
     }
-    .spec-pill {
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
+
+    .pillar-media-sensor .pillar-media-analysis {
+      position: absolute;
+      inset: 0;
     }
-    .fade-line {
-      background: linear-gradient(90deg, rgba(154,255,95,0), rgba(154,255,95,.7), rgba(92,66,255,.7), rgba(154,255,95,0));
+
+    .pillar-media-sensor .pillar-media-product {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      width: min(44%, 240px);
+      min-height: 220px;
+      z-index: 2;
+      box-shadow: 0 20px 52px rgba(0, 0, 0, 0.26);
+    }
+
+    .pillar-media-analysis img {
+      object-position: center;
+    }
+
+    .pillar-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .pillar-list li {
+      position: relative;
+      padding-left: 18px;
+      color: rgba(221, 232, 245, 0.74);
+      line-height: 1.68;
+    }
+
+    .pillar-list li::before {
+      content: "";
+      position: absolute;
+      top: 0.7rem;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #2f6bff, #08d1a0);
+    }
+
+    .pillar-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pillar-metrics span,
+    .pillar-stat {
+      border: 1px solid rgba(159, 184, 216, 0.14);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .pillar-metrics span {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #f5fbff;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .pillar-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pillar-stat {
+      padding: 16px;
+      border-radius: 20px;
+    }
+
+    .pillar-stat strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #ffffff;
+      font-size: 1rem;
+      line-height: 1.1;
+    }
+
+    .pillar-stat span {
+      display: block;
+      color: rgba(222, 233, 246, 0.7);
+      line-height: 1.56;
+      font-size: 0.9rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .tag::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .modular-overview {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .modular-note {
+      padding: 28px;
+    }
+
+    .modular-note h3 {
+      margin: 16px 0 10px;
+      font-size: 1.36rem;
+      line-height: 1.12;
+    }
+
+    .modular-note p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .module-stage-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .module-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      gap: 0;
+      align-items: stretch;
+      border-radius: calc(var(--radius-xl) + 2px);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(245, 247, 251, 0.76)),
+        radial-gradient(circle at top right, rgba(47, 107, 255, 0.08), transparent 32%);
+    }
+
+    .module-stage.is-reverse {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    }
+
+    .module-stage-media {
+      position: relative;
+      min-height: 380px;
+      overflow: hidden;
+      border-right: 1px solid var(--line);
+    }
+
+    .module-stage.is-reverse .module-stage-media {
+      order: 2;
+      border-right: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .module-stage-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .module-stage-copy {
+      padding: 30px;
+      display: grid;
+      align-content: center;
+      gap: 14px;
+    }
+
+    .module-stage-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .module-stage-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.52);
+      color: var(--text);
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .module-stage-copy h3 {
+      margin: 0;
+      font-size: clamp(1.8rem, 2.9vw, 2.9rem);
+      line-height: 1.02;
+      max-width: 13ch;
+    }
+
+    .module-stage-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.84;
+    }
+
+    .module-stage-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .module-stage-badges span {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.52);
+      color: var(--accent);
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .module-stage {
+        background:
+          linear-gradient(180deg, rgba(9, 19, 31, 0.9), rgba(7, 16, 27, 0.84)),
+          radial-gradient(circle at top right, rgba(47, 107, 255, 0.12), transparent 34%);
+      }
+
+      .module-stage-pill,
+      .module-stage-badges span {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+
+    .module-card {
+      overflow: hidden;
+    }
+
+    .module-card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .module-card-body {
+      padding: 24px;
+    }
+
+    .module-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .module-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.40);
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    .module-meta img {
+      width: 18px;
+      height: 18px;
+      border: none;
+      aspect-ratio: auto;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .module-meta span {
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+
+    .timeline-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .timeline-grid::before {
+      content: "";
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      top: 42px;
       height: 1px;
+      background: linear-gradient(90deg, rgba(47, 107, 255, 0.22), rgba(8, 209, 160, 0.18));
+      z-index: 0;
+    }
+
+    .timeline-card {
+      z-index: 1;
+      padding: 22px;
+    }
+
+    .timeline-card strong {
+      display: block;
+      margin: 16px 0 8px;
+      font-size: 1rem;
+    }
+
+    .timeline-card .icon-chip {
+      position: relative;
+    }
+
+    .timeline-card .icon-chip::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 8px);
+      width: 1px;
+      height: 22px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, rgba(47, 107, 255, 0.45), rgba(8, 209, 160, 0));
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .conversion-strip {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .conversion-strip h3,
+    .deliverables-card h3 {
+      margin: 14px 0 10px;
+      font-size: 1.34rem;
+      line-height: 1.15;
+    }
+
+    .conversion-strip-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .deliverables-card {
+      padding: 24px;
+    }
+
+    .deliverables-card strong {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .benefit-card {
+      padding: 24px;
+    }
+
+    .quote-card {
+      padding: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .quote-card h2 {
+      margin: 18px 0 14px;
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      line-height: 1.02;
+      max-width: 12ch;
+    }
+
+    .quote-panel {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(47, 107, 255, 0.12), transparent 38%),
+        rgba(255, 255, 255, 0.42);
+      box-shadow: var(--shadow-soft);
+      font-size: 1.05rem;
+      line-height: 1.84;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .quote-panel {
+        background:
+          radial-gradient(circle at top right, rgba(105, 163, 255, 0.12), transparent 38%),
+          rgba(255, 255, 255, 0.03);
+      }
+    }
+
+    footer {
+      padding: 28px 0 58px;
+      color: var(--muted);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .source-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .source-links a {
+      color: var(--text);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 720ms ease, transform 720ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left,
+    .reveal-right {
+      opacity: 0;
+      transition: opacity 760ms ease, transform 760ms ease;
+    }
+
+    .reveal-left {
+      transform: translateX(-42px);
+    }
+
+    .reveal-right {
+      transform: translateX(42px);
+    }
+
+    .reveal-left.is-visible,
+    .reveal-right.is-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .reveal-left,
+      .reveal-right {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    @media (max-width: 1160px) {
+      .hero,
+      .project-banner,
+      .split,
+      .modular-overview,
+      .module-stage,
+      .conversion-strip,
+      .quote-card,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .visual-grid,
+      .metrics-grid,
+      .timeline-grid,
+      .deliverables-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pillar-panel,
+      .pillar-row {
+        grid-template-columns: 1fr;
+      }
+
+      .pillar-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pillars-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav {
+        display: none;
+      }
+
+      .hero-ribbon,
+      .compare-grid,
+      .compare-showcase,
+      .modules-grid,
+      .benefits-grid,
+      .conversion-strip-actions,
+      .pillar-media-sensor {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 460px;
+      }
+
+      .project-banner-media {
+        min-height: 220px;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+      }
+
+      .project-banner-copy {
+        padding: 24px;
+      }
+
+      .pillar-showcase {
+        padding: 22px;
+      }
+
+      .pillar-panel {
+        padding: 20px;
+      }
+
+      .module-stage.is-reverse .module-stage-media {
+        order: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .module-stage-media {
+        min-height: 280px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .module-stage-copy {
+        padding: 24px;
+      }
+
+      .pillar-media-frame {
+        min-height: 260px;
+      }
+
+      .pillar-media-sensor {
+        min-height: 320px;
+      }
+
+      .pillar-media-sensor .pillar-media-product {
+        width: min(46%, 200px);
+      }
+
+      .conversion-strip-actions {
+        display: grid;
+        justify-content: stretch;
+      }
+
+      .timeline-grid::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .shell,
+      .topbar-inner {
+        width: min(var(--max), calc(100% - 22px));
+      }
+
+      .hero {
+        padding-top: 64px;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .visual-grid,
+      .metrics-grid,
+      .timeline-grid,
+      .pillars-grid,
+      .deliverables-grid,
+      .pillar-meta {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-<body class="bg-neuro-black text-white">
-  <div class="fixed inset-0 grid-bg pointer-events-none"></div>
-  <div class="fixed -top-40 -left-24 w-[34rem] h-[34rem] rounded-full bg-neuro-blue opacity-20 blur-[120px] pointer-events-none"></div>
-  <div class="fixed top-40 right-[-8rem] w-[28rem] h-[28rem] rounded-full bg-neuro-green opacity-10 blur-[120px] pointer-events-none"></div>
-
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-black/55 backdrop-blur-xl">
-    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3 min-w-0">
-        <div class="w-12 h-12 rounded-xl overflow-hidden bg-black border border-neuro-green/30 shadow-glow shrink-0">
-          <img src="https://d2u1z1lopyfwlx.cloudfront.net/thumbnails/7723eb7e-e952-5f88-88a2-04700d143b8c/222ac340-fa5d-5f16-81c7-2cb2ab6c5aad.jpg" alt="Albatro Errante" class="w-full h-full object-cover">
-        </div>
-        <div class="min-w-0">
-          <p class="font-orbitron text-sm md:text-base font-bold tracking-[0.18em] truncate">ALBATRO ERRANTE</p>
-          <p class="text-[11px] text-gray-400 tracking-[0.15em] uppercase">Sistema modular UAV + IA para entornos extremos</p>
-        </div>
+<body>
+  <header class="topbar" id="top">
+    <div class="topbar-inner">
+      <div class="brand">
+        <strong>Ecosistema de Inteligencia Artificial Autónoma</strong>
+        <span>Operaciones antárticas | soberanía tecnológica | decisión táctica</span>
       </div>
-      <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
-        <a href="#vision" class="hover:text-neuro-green transition">Visión</a>
-        <a href="#productos" class="hover:text-neuro-green transition">Productos</a>
-        <a href="#arquitectura" class="hover:text-neuro-green transition">Arquitectura</a>
-        <a href="#implementacion" class="hover:text-neuro-green transition">Implementación</a>
+      <nav class="nav" aria-label="Secciones principales">
+        <a href="#paradigma">Paradigma</a>
+        <a href="#solucion">Solución</a>
+        <a href="#arquitectura">Arquitectura</a>
+        <a href="#modulos">Módulos</a>
+        <a href="#entrenamiento">Entrenamiento</a>
+        <a href="#beneficios">Beneficios</a>
       </nav>
-      <a href="#productos" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neuro-green text-black font-orbitron font-bold text-xs hover:bg-white transition">
-        Ver propuesta
-      </a>
     </div>
   </header>
 
-  <section id="inicio" data-nav-section data-nav-title="Inicio" class="relative scroll-mt-28">
-    <div class="max-w-7xl mx-auto px-5 pt-16 pb-12 md:pt-24 md:pb-20">
-      <div class="grid lg:grid-cols-[1.1fr_.9fr] gap-12 items-center">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] tracking-[0.18em] uppercase text-gray-300 mb-4">
-            Proyecto Albatro Errante
-          </div>
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] tracking-[0.18em] uppercase text-gray-300 mb-6">
-            Extremo. Modular. Escalable.
-          </div>
-          <h1 class="font-orbitron font-black text-4xl md:text-6xl leading-[1.02] tracking-tight max-w-4xl">
-            Arquitectura de <span class="grad-text animate-shine">drones, IA y vigilancia de superficie</span> para misiones críticas.
-          </h1>
-          <p class="mt-6 max-w-2xl text-base md:text-lg text-gray-300 leading-relaxed">
-            Una propuesta visual y comercial para desplegar capacidad operativa incremental en escenarios de defensa, búsqueda y rescate, reconocimiento, logística y monitoreo en entornos extremos como la Antártida.
+  <main class="shell">
+    <section class="project-intro">
+      <article class="project-banner card reveal">
+        <div class="project-banner-media">
+          <img src="assets/media/albatros-errante.jpg" alt="Albatros errante sobre el mar">
+        </div>
+        <div class="project-banner-copy">
+          <span class="eyebrow">Proyecto Albatros Errante</span>
+          <h2>Capacidad modular para vigilancia, rescate y dominio operativo en la Antártida.</h2>
+          <p>
+            El Proyecto Albatros Errante integra vigilancia, reconocimiento, SAR, logística
+            estratégica, monitoreo ambiental y dominio marítimo dentro de una misma arquitectura
+            diseñada para el teatro antártico.
           </p>
-
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="#productos" class="px-6 py-3 rounded-2xl bg-neuro-green text-black font-orbitron font-bold text-sm hover:bg-white transition shadow-glow">Explorar productos</a>
-            <a href="#arquitectura" class="px-6 py-3 rounded-2xl border border-white/10 bg-white/5 text-white font-orbitron font-bold text-sm hover:border-neuro-green/40 hover:text-neuro-green transition">Ver arquitectura modular</a>
-          </div>
-
-          <div class="mt-10 grid sm:grid-cols-3 gap-4 max-w-3xl">
-            <div class="glass rounded-2xl p-4">
-              <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Cobertura</p>
-              <p class="mt-2 text-2xl font-bold">Aérea + Marítima</p>
-              <p class="mt-2 text-sm text-gray-400">Capas coordinadas según misión, terreno y ventana operativa.</p>
-            </div>
-            <div class="glass rounded-2xl p-4">
-              <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.2em] uppercase">IA aplicada</p>
-              <p class="mt-2 text-2xl font-bold">Edge + Estación</p>
-              <p class="mt-2 text-sm text-gray-400">Análisis asistido, priorización de alertas y explotación de datos.</p>
-            </div>
-            <div class="glass rounded-2xl p-4">
-              <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Compra pública</p>
-              <p class="mt-2 text-2xl font-bold">Implementación gradual</p>
-              <p class="mt-2 text-sm text-gray-400">Escalable por módulos según presupuesto, base y necesidad.</p>
-            </div>
+          <p>
+            Medios no tripulados, sensores científicos, procesamiento en el borde y comunicaciones
+            resilientes se coordinan para convertir datos brutos en decisiones tácticas inmediatas.
+          </p>
+          <div class="project-banner-notes">
+            <span>Modular</span>
+            <span>Teatro antártico</span>
+            <span>IA soberana</span>
           </div>
         </div>
+      </article>
+    </section>
 
-        <div class="relative">
-          <div class="glass tech-shell rounded-[2rem] p-4 shadow-blueglow">
-            <div class="tech-media rounded-[1.5rem] border border-white/10">
-              <img src="https://d2u1z1lopyfwlx.cloudfront.net/thumbnails/7723eb7e-e952-5f88-88a2-04700d143b8c/222ac340-fa5d-5f16-81c7-2cb2ab6c5aad.jpg" alt="Albatro Errante" class="w-full h-[420px] object-cover opacity-90">
-              <div class="tech-image-tag">
-                <div>
-                  <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase text-neuro-green">Identidad del proyecto</p>
-                  <p class="mt-1 text-sm font-semibold text-white">Albatro Errante</p>
-                </div>
-                <span class="tech-dot" aria-hidden="true"></span>
-              </div>
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <span class="eyebrow">Propuesta de valor estratégico</span>
+        <h1>Detecta riesgos y acelera decisiones críticas en la Antártida.</h1>
+        <p>
+          Un ecosistema de robótica autónoma definida por software que interpreta el entorno extremo,
+          activa módulos según la misión y entrega decisiones críticas listas para ejecutar.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#cierre-comercial">Solicitar presentación ejecutiva</a>
+          <a class="button button-secondary" href="#modulos">Ver capacidades del sistema</a>
+        </div>
+        <div class="hero-ribbon">
+          <article class="hero-metric">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/drone.png" alt="Ícono de drone">
             </div>
-            <div class="mt-4 grid grid-cols-2 gap-4">
-              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
-                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-green">Proyecto</p>
-                <p class="mt-2 text-sm text-gray-300">Albatro Errante aporta una identidad visual más clara para presentar la propuesta modular con mayor recordación y presencia.</p>
-              </div>
-              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
-                <p class="text-[10px] font-orbitron tracking-[0.16em] uppercase text-neuro-blue2">Presencia visual</p>
-                <p class="mt-2 text-sm text-gray-300">Refuerza la narrativa del sistema con una imagen propia del proyecto, sin depender solo de capturas de plataformas o videos.</p>
-              </div>
+            <strong>Cubre múltiples misiones</strong>
+            <p>Una misma base tecnológica acompaña patrullaje, apoyo al Irízar, rescate, observación científica y comando estratégico.</p>
+          </article>
+          <article class="hero-metric">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/artificial-intelligence.png" alt="Ícono de inteligencia artificial">
             </div>
-          </div>
-          <div class="absolute -bottom-4 -right-4 glass rounded-2xl px-4 py-3 animate-floaty">
-            <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase text-neuro-green">Operaciones extremas</p>
-            <p class="mt-1 text-sm text-gray-200">Frío, nieve, vientos, baja infraestructura.</p>
-          </div>
+            <strong>Decide en tiempo útil</strong>
+            <p>La plataforma procesa grietas, señales térmicas, hielo marino y datos de sensores en el mismo ciclo de misión.</p>
+          </article>
+          <article class="hero-metric">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/control-panel.png" alt="Ícono de panel de control">
+            </div>
+            <strong>Entrega productos utilizables</strong>
+            <p>Los datos llegan a la base y al Estado Mayor como mapas, alertas, dashboards y reportes listos para decisión.</p>
+          </article>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section id="vision" data-nav-section data-nav-title="Visión" class="py-12 md:py-16 scroll-mt-28">
-    <div class="max-w-7xl mx-auto px-5">
-      <div class="fade-line mb-8"></div>
-      <div class="grid lg:grid-cols-3 gap-6">
-        <div class="glass rounded-3xl p-6 lg:col-span-1">
-          <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Propuesta de valor</p>
-          <h2 class="mt-3 font-orbitron font-bold text-2xl md:text-3xl">No es un dron. Es una capacidad operativa ampliable.</h2>
-        </div>
-        <div class="glass rounded-3xl p-6 lg:col-span-2">
-          <div class="grid md:grid-cols-3 gap-5">
-            <div>
-              <p class="text-sm font-semibold text-white">Eficiencia operativa</p>
-              <p class="mt-2 text-sm text-gray-400">Más cobertura por misión, menos despliegue humano directo y mejor lectura situacional.</p>
-            </div>
-            <div>
-              <p class="text-sm font-semibold text-white">Reducción de riesgo</p>
-              <p class="mt-2 text-sm text-gray-400">Se traslada exposición desde personal hacia sistemas no tripulados y sensores remotos.</p>
-            </div>
-            <div>
-              <p class="text-sm font-semibold text-white">Escalabilidad presupuestaria</p>
-              <p class="mt-2 text-sm text-gray-400">Se puede comenzar con núcleo táctico y crecer hacia alcance extendido, IA y superficie.</p>
-            </div>
-          </div>
+      <div class="hero-visual reveal">
+        <img src="assets/media/drone-antartica-octocopter.jpg" alt="Octocóptero operando en entorno antártico">
+        <div class="hero-stack">
+          <article class="hero-note">
+            <small>Plataforma polar</small>
+            <strong>Una sola base robótica incorpora visión dual, LiDAR, GPR, comunicaciones tácticas y analítica local.</strong>
+            <span>La arquitectura se expande por software y crece con cada nueva campaña, cada nuevo dataset y cada nueva misión.</span>
+          </article>
+          <article class="hero-note">
+            <small>Valor operativo</small>
+            <strong>La información crítica se convierte en coordenadas, nivel de certeza, alertas de riesgo y productos listos para comando.</strong>
+            <span>El resultado combina seguridad humana, eficiencia satelital y patrimonio tecnológico soberano.</span>
+          </article>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="productos" data-nav-section data-nav-title="Productos" class="py-10 md:py-16 scroll-mt-28">
-    <div class="max-w-7xl mx-auto px-5">
-      <div class="flex items-end justify-between gap-4 flex-wrap mb-8">
+    <section class="section" id="paradigma">
+      <div class="section-head reveal">
+        <span class="eyebrow">1. El paradigma actual y el salto estratégico</span>
+        <h2>El valor empieza cuando el vehículo entiende la Antártida y actúa dentro de la misión.</h2>
+        <p>
+          El documento parte de una idea simple: una plataforma comercial de alta gama aporta vuelo,
+          sensores y autonomía básica, pero la operación antártica exige comprensión del terreno,
+          lectura de riesgo y productos listos para decisión. El salto estratégico es convertir al
+          vehículo en un sistema que interpreta el entorno extremo en tiempo útil.
+        </p>
+      </div>
+
+      <div class="split">
+        <article class="section-card reveal-left">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/drone.png" alt="Ícono de drone">
+          </div>
+          <h3>Del registro remoto a la comprensión operativa</h3>
+          <ul class="signal-list">
+            <li>La misión deja de depender de revisar el material horas después del vuelo.</li>
+            <li>La plataforma reconoce grietas ocultas, growlers, calor humano y señales del hielo dentro del mismo ciclo operativo.</li>
+            <li>El hallazgo aparece georreferenciado y listo para coordinar patrullas, rescate o navegación.</li>
+          </ul>
+        </article>
+
+        <article class="section-card reveal-right">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/radar.png" alt="Ícono de radar">
+          </div>
+          <h3>Las señales que realmente importan en el continente blanco</h3>
+          <ul class="signal-list">
+            <li>Puentes de nieve y grietas subglaciales invisibles desde el exterior.</li>
+            <li>Growlers semisumergidos que condicionan desembarcos y maniobras navales.</li>
+            <li>Firmas térmicas humanas en whiteout, rutas seguras y lectura del hielo marino.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="visual-grid">
+        <article class="media-card reveal-left">
+          <img src="assets/media/crevasse-antarctica-nasa.jpg" alt="Grieta glacial en la Antártida">
+          <div class="media-card-body">
+            <strong>Grietas ocultas bajo nieve</strong>
+            <p>Un riesgo crítico que exige detección anticipada, georreferenciación y alerta inmediata.</p>
+          </div>
+        </article>
+        <article class="media-card reveal-right">
+          <img src="assets/media/growler-iceberg-aad.jpg" alt="Growler o bloque de hielo semisumergido en aguas antárticas">
+          <div class="media-card-body">
+            <strong>Growlers en navegación</strong>
+            <p>La percepción avanzada suma lectura visual allí donde los radares navales no alcanzan.</p>
+          </div>
+        </article>
+        <article class="media-card reveal-left">
+          <img src="assets/media/drone-pinguinos-enea.jpg" alt="Drone operando cerca de pingüinos en entorno antártico">
+          <div class="media-card-body">
+            <strong>Fauna y evidencia científica</strong>
+            <p>La misma arquitectura también sirve para censos inteligentes y monitoreo ambiental.</p>
+          </div>
+        </article>
+        <article class="media-card reveal-right">
+          <img src="assets/media/ara-almirante-irizar-marambio.jpg" alt="ARA Almirante Irízar navegando entre hielo antártico">
+          <div class="media-card-body">
+            <strong>Apoyo al Irízar y a campaña</strong>
+            <p>La información deja de ser solo imagen y se convierte en una ayuda real para decidir.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="solucion">
+      <div class="section-head reveal">
+        <span class="eyebrow">2. Nuestra solución: robótica autónoma definida por software</span>
+        <h2>El proyecto propone construir el Cerebro Antártico Nacional sobre plataformas de misión reconfigurables.</h2>
+        <p>
+          La propuesta técnica transforma UAV y USV en un ecosistema de inteligencia táctica. La
+          plataforma se adapta al tamaño de la misión, incorpora módulos intercambiables y activa
+          analítica local para entregar alertas, coordenadas, mapas y productos de comando.
+        </p>
+      </div>
+
+      <div class="split">
+        <article class="section-card reveal-left">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/artificial-intelligence.png" alt="Ícono de inteligencia artificial">
+          </div>
+          <h3>Una base tecnológica preparada para evolucionar</h3>
+          <ul class="signal-list">
+            <li>Agnosticismo de hardware para integrar vehículos aéreos o de superficie según la magnitud de la misión.</li>
+            <li>Módulos intercambiables para visión dual, LiDAR, GPR y comunicaciones tácticas.</li>
+            <li>Procesamiento embarcado para convertir percepción en decisión dentro del mismo teatro operativo.</li>
+          </ul>
+        </article>
+
+        <div class="support-media reveal-right">
+          <img src="assets/media/drone-antartida-closeup.jpg" alt="Drone de grado antártico en operación">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head reveal">
+        <span class="eyebrow">2.1 Micro-supercomputación y comunicaciones de alerta crítica</span>
+        <h2>El procesamiento viaja a bordo para reducir latencia, cuidar ancho de banda y acelerar la reacción.</h2>
+        <p>
+          La arquitectura traslada la capacidad de cómputo al vehículo y combina edge computing,
+          georreferenciación instantánea y comunicaciones jerarquizadas. Así, la misión transmite lo
+          crítico en tiempo real y reserva la descarga masiva para cuando la conectividad lo permite.
+        </p>
+      </div>
+
+      <div class="metrics-grid">
+        <article class="metric-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/artificial-intelligence.png" alt="Ícono de inteligencia artificial">
+          </div>
+          <strong>&lt; 25W</strong>
+          <span>Eficiencia SWaP</span>
+          <p>Consumo compatible con operación subcero y autonomía táctica embarcada.</p>
+        </article>
+        <article class="metric-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/command-line.png" alt="Ícono de software">
+          </div>
+          <strong>70+ TOPS</strong>
+          <span>Potencia embarcada</span>
+          <p>Capacidad para procesar video de alta resolución y nubes de puntos LiDAR en simultáneo.</p>
+        </article>
+        <article class="metric-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/drone.png" alt="Ícono de drone">
+          </div>
+          <strong>30 FPS</strong>
+          <span>Velocidad de reacción</span>
+          <p>Ejecución simultánea de modelos para personas, grietas y otras señales de misión.</p>
+        </article>
+        <article class="metric-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/satellite.png" alt="Ícono de satélite">
+          </div>
+          <strong>1 KB</strong>
+          <span>Telemetría crítica</span>
+          <p>Mensajes ligeros para coordinar peligro, posición y estado sobre cobertura polar.</p>
+        </article>
+        <article class="metric-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/database.png" alt="Ícono de base de datos">
+          </div>
+          <strong>&lt; 2 KB</strong>
+          <span>Hallazgo procesado</span>
+          <p>La imagen se resume como certeza, coordenada y evento listo para integrarse al comando.</p>
+        </article>
+      </div>
+
+      <div class="compare-grid">
+        <article class="section-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/search.png" alt="Ícono de búsqueda">
+          </div>
+          <h3>Lean AI para seguridad en tiempo real</h3>
+          <p>
+            El documento asigna la inferencia inmediata a las misiones donde la seguridad humana es
+            crítica. La plataforma descarta ruido visual y transmite únicamente la anomalía útil para
+            detener una patrulla, orientar un rescate o proteger un desembarco.
+          </p>
+          <ul class="bullet-list">
+            <li>Patrullas terrestres sobre nieve y firn.</li>
+            <li>Detección de grietas y señales de riesgo instantáneas.</li>
+            <li>Búsqueda y rescate con priorización táctica del hallazgo.</li>
+          </ul>
+        </article>
+        <article class="section-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/bar-chart.png" alt="Ícono de analítica">
+          </div>
+          <h3>Store-and-forward para ciencia y explotación</h3>
+          <p>
+            La capa científica y post-vuelo aprovecha estaciones base de mayor potencia para conteo,
+            clasificación, comparación histórica y generación masiva de productos analíticos para el IAA y el comando.
+          </p>
+          <ul class="bullet-list">
+            <li>Censos automatizados de fauna y analítica de campañas.</li>
+            <li>Mapas, planillas y PDF listos para firma.</li>
+            <li>Sincronización de información desde la base hacia Buenos Aires.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="compare-showcase">
+        <div class="reveal">
+          <div class="compare-stage" id="compare-stage" style="--compare-position: 58%;">
+            <img src="assets/media/drone-pinguinos-enea.jpg" alt="Captura aérea de fauna antártica sin procesar">
+            <div class="compare-overlay">
+              <img src="assets/media/analitica-pinguinos-enea.jpg" alt="Captura aérea con detecciones automatizadas de fauna">
+            </div>
+            <div class="compare-divider"></div>
+            <div class="compare-handle">↔</div>
+            <span class="compare-label left">Dato procesado</span>
+            <span class="compare-label right">Captura original</span>
+          </div>
+        </div>
+
+        <article class="section-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/bar-chart.png" alt="Ícono de analítica">
+          </div>
+          <h3>De imagen capturada a inteligencia utilizable</h3>
+          <p>
+            Este tipo de lectura resume bien el corazón del proyecto: el sistema observa una escena
+            compleja, identifica patrones relevantes y la convierte en un producto operativo o
+            científico listo para distribuir, interpretar y comparar con campañas anteriores.
+          </p>
+          <ul class="bullet-list">
+            <li>La imagen original se transforma en coordenadas, conteos y evidencia estructurada.</li>
+            <li>La base recibe información accionable en vez de depender de revisión manual diferida.</li>
+            <li>La misma lógica sirve para ciencia, rutas seguras, búsqueda y comando estratégico.</li>
+          </ul>
+          <input
+            class="compare-slider"
+            id="compare-slider"
+            type="range"
+            min="20"
+            max="80"
+            value="58"
+            aria-label="Comparar captura original con dato procesado"
+          >
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="arquitectura">
+      <div class="section-head reveal">
+        <span class="eyebrow">2.2 Cinco pilares tecnológicos de grado polar</span>
+        <h2>Cinco pilares coordinan movilidad, percepción, inteligencia, soberanía analítica y comando.</h2>
+        <p>
+          La solución se apoya en cinco pilares complementarios, exactamente como plantea el
+          documento. Juntos explican por qué la propuesta no vende una plataforma aislada, sino una
+          arquitectura completa preparada para crecer por software y por módulos.
+        </p>
+      </div>
+
+      <div class="pillar-showcase">
+        <article class="pillar-panel reveal-left">
+          <div class="pillar-media-frame">
+            <img src="assets/media/drone-antartica-octocopter.jpg" alt="Drone multirrotor de grado polar operando sobre costa antártica">
+          </div>
+          <div class="pillar-copy">
+            <span class="tag">Pilar I</span>
+            <h3>Plataformas de vuelo y navegación preparadas para ambiente polar</h3>
+            <p>
+              La plataforma es la base física del ecosistema. Aporta estabilidad, capacidad de carga y
+              continuidad de misión para despegar, sostener sensores y operar con precisión sobre hielo,
+              roca, costa y superficies cambiantes.
+            </p>
+            <div class="pillar-metrics">
+              <span>Grado polar</span>
+              <span>Autocalentamiento</span>
+              <span>Viento &gt; 20 m/s</span>
+            </div>
+            <ul class="pillar-list">
+              <li>Permite patrullaje cercano, exploración y apoyo a operaciones críticas con una misma arquitectura.</li>
+              <li>Integra cargas útiles tácticas, científicas y de comunicaciones sin rediseñar la flota.</li>
+              <li>Convierte la movilidad aérea en una capacidad permanente y escalable para cada campaña.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="pillar-panel reveal-right">
+          <div class="pillar-copy">
+            <span class="tag">Pilar II</span>
+            <h3>Cargas útiles configuradas para cada orden de operaciones</h3>
+            <p>
+              Las cargas útiles convierten a la plataforma en un sistema reconfigurable. La misma célula
+              aérea puede salir a inspeccionar, relevar relieve, leer temperatura, extender
+              comunicaciones o producir cartografía precisa según la misión del día.
+            </p>
+            <div class="pillar-meta">
+              <div class="pillar-stat">
+                <strong>LiDAR</strong>
+                <span>Nubes de puntos, elevación y lectura de relieve listas para explotación operativa.</span>
+              </div>
+              <div class="pillar-stat">
+                <strong>RTK</strong>
+                <span>Posicionamiento preciso para entregar hallazgos georreferenciados y comparables.</span>
+              </div>
+              <div class="pillar-stat">
+                <strong>Fusión</strong>
+                <span>Óptica, térmica, LiDAR, GPR y repetidores según la necesidad de cada misión.</span>
+              </div>
+            </div>
+            <ul class="pillar-list">
+              <li>Permite cambiar la misión del día sin cambiar la célula aérea ni romper la arquitectura.</li>
+              <li>Hace visible superficie, volumen y temperatura con un mismo flujo de trabajo.</li>
+              <li>Convierte al sensor en argumento de compra concreto: más lectura útil por campaña.</li>
+            </ul>
+          </div>
+          <div class="pillar-media-sensor">
+            <figure class="pillar-media-frame pillar-media-analysis">
+              <img src="assets/media/l2-shot-a.jpg" alt="Visualización de nube de puntos capturada con LiDAR">
+            </figure>
+            <figure class="pillar-media-frame pillar-media-product">
+              <img src="assets/media/l2-render.png" alt="Sensor DJI Zenmuse L2">
+            </figure>
+          </div>
+        </article>
+
+        <article class="pillar-panel reveal-left">
+          <div class="pillar-media-frame">
+            <img src="assets/media/nvidia-jetson-orin-nano-super.jpg" alt="NVIDIA Jetson Orin Nano Super Developer Kit">
+          </div>
+          <div class="pillar-copy">
+            <span class="tag">Pilar III</span>
+            <h3>Micro-supercomputación embarcada y alertas listas en tiempo útil</h3>
+            <p>
+              El cerebro viaja a bordo. La inferencia ocurre en el borde para detectar, clasificar,
+              georreferenciar y transmitir hallazgos relevantes sin esperar una conexión persistente con
+              la base, algo decisivo en un teatro austero como la Antártida.
+            </p>
+            <div class="pillar-metrics">
+              <span>70+ TOPS</span>
+              <span>&lt; 25 W</span>
+              <span>30 FPS</span>
+            </div>
+            <ul class="pillar-list">
+              <li>Procesa video, analítica y telemetría localmente para reducir latencia y dependencia de enlace.</li>
+              <li>Entrega coordenadas, certeza y eventos compactos listos para comunicar por canales críticos.</li>
+              <li>Hace viable una arquitectura de IA autónoma donde la decisión empieza arriba del vehículo.</li>
+            </ul>
+          </div>
+        </article>
+
+        <div class="pillar-row">
+          <article class="pillar-panel pillar-panel-vertical reveal-left">
+            <div class="pillar-media-frame">
+              <img src="assets/media/analitica-pinguinos-enea.jpg" alt="Analítica de inteligencia artificial aplicada a colonia de pingüinos">
+            </div>
+            <div class="pillar-copy">
+              <span class="tag">Pilar IV</span>
+              <h3>Inteligencia artificial soberana entrenada con datos del terreno real</h3>
+              <p>
+                El valor diferencial está en el software propio. La IA transforma la captura en conteos,
+                alertas, clasificación y evidencia estructurada para ciencia, seguridad y planeamiento,
+                incluso cuando la conectividad es limitada.
+              </p>
+              <div class="pillar-metrics">
+                <span>90.74%</span>
+                <span>97% / 89%</span>
+                <span>Offline</span>
+              </div>
+              <ul class="pillar-list">
+                <li>Entrena modelos sobre imágenes reales de geografía, hielo, fauna y operación polar.</li>
+                <li>Convierte observación manual diferida en producto analítico utilizable dentro de la misión.</li>
+                <li>Construye una capacidad soberana que mejora con cada nuevo dataset y cada nueva campaña.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="pillar-panel pillar-panel-vertical reveal-right">
+            <div class="pillar-media-frame">
+              <img src="assets/media/saocom-campana-antartica.png" alt="Imagen SAOCOM utilizada para apoyo a la campaña antártica y al rompehielos Irízar">
+            </div>
+            <div class="pillar-copy">
+            <span class="tag">Pilar V</span>
+            <h3>Infraestructura de explotación y C4ISR para convertir vuelos en mando</h3>
+            <p>
+              Aquí la arquitectura se vuelve capacidad institucional. Cada misión se transforma en mapas,
+              alertas, dashboards y productos de comando listos para la base, el ARA Almirante Irízar y
+              los centros de decisión.
+            </p>
+              <div class="pillar-metrics">
+                <span>SAOCOM</span>
+                <span>Irízar</span>
+                <span>C4ISR</span>
+              </div>
+              <ul class="pillar-list">
+                <li>Integra evidencia aérea, satelital y analítica en una vista comprensible para operación y conducción.</li>
+                <li>Amplía la conciencia situacional con mapas interactivos, semáforos de riesgo y seguimiento de campaña.</li>
+                <li>Ordena el dato como patrimonio institucional acumulativo y reutilizable.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head reveal">
+        <span class="eyebrow">3. Capacidades estratégicas y modulares</span>
+        <h2>La propuesta escala por módulos que pueden activarse, ampliarse o incorporarse según prioridad operativa.</h2>
+        <p>
+          El documento ordena los módulos por criticidad para el Estado. Esa lógica hace muy clara la
+          propuesta comercial: la misma arquitectura se puede desplegar en fases, vender por capacidad
+          y ampliar sin reemplazar la base tecnológica.
+        </p>
+      </div>
+
+      <div class="modular-overview">
+        <article class="modular-note section-card reveal-left">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/control-panel.png" alt="Ícono de arquitectura modular">
+          </div>
+          <h3>Una hoja de ruta escalable para compra, despliegue y evolución continua</h3>
+          <p>
+            El ecosistema funciona bajo un modelo de módulos intercambiables. Eso permite presentar la
+            solución como una arquitectura escalable: el Estado puede priorizar protección de la vida,
+            apoyo logístico, ciencia o comando estratégico, y luego sumar nuevas capacidades sobre la
+            misma base robótica y el mismo cerebro analítico.
+          </p>
+        </article>
+
+        <div class="deliverables-grid">
+          <article class="deliverables-card reveal-right card">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/search.png" alt="Ícono de búsqueda">
+            </div>
+            <strong>Módulo A · SAR</strong>
+            <p>Protección de la vida y reducción del riesgo durante la fase crítica de búsqueda.</p>
+          </article>
+          <article class="deliverables-card reveal-left card">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/iceberg.png" alt="Ícono de iceberg">
+            </div>
+            <strong>Módulo B · Logístico y naval</strong>
+            <p>Apoyo a campañas, navegación antártica, desembarcos e inspección de infraestructura.</p>
+          </article>
+          <article class="deliverables-card reveal-right card">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/microscope.png" alt="Ícono científico">
+            </div>
+            <strong>Módulo C · Científico</strong>
+            <p>Censos de fauna, monitoreo ambiental y generación ordenada de bases de datos.</p>
+          </article>
+          <article class="deliverables-card reveal-left card">
+            <div class="icon-chip">
+              <img src="https://img.icons8.com/color/96/control-panel.png" alt="Ícono de control">
+            </div>
+            <strong>Módulo D · Explotación y comando</strong>
+            <p>Mapas, dashboards, planillas, PDF e integración con inteligencia analítica centralizada.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="modulos">
+      <div class="section-head reveal">
+        <span class="eyebrow">3.1 Propuesta modular escalable</span>
+        <h2>Cada módulo tiene un objetivo claro, una misión asociada y un valor comercial identificable.</h2>
+        <p>
+          Presentados como una serie de capacidades activables, los módulos se entienden mejor y se
+          vuelven más vendibles. Cada bloque responde a una necesidad operativa concreta y puede
+          desplegarse como fase independiente dentro de la misma arquitectura.
+        </p>
+      </div>
+
+      <div class="module-stage-grid">
+        <article class="module-stage reveal-left">
+          <div class="module-stage-media">
+            <img src="assets/media/crevasse-antarctica-nasa.jpg" alt="Zona con grietas y fracturas en la Antártida">
+          </div>
+          <div class="module-stage-copy">
+            <div class="module-stage-top">
+              <span class="tag">Módulo A</span>
+              <span class="module-stage-pill">Prioridad 1 · SAR</span>
+            </div>
+            <h3>Búsqueda y rescate para preservar la vida con exposición humana mínima</h3>
+            <p>
+              El dron opera como primer respondedor aéreo. Detecta, inspecciona, georreferencia y
+              guía la intervención humana con más contexto y menos exposición durante la fase crítica.
+            </p>
+            <div class="module-stage-badges">
+              <span>Activable por separado</span>
+              <span>Protección de la vida</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Inspección de grietas con térmica, LiDAR y mapeo 3D de paredes inestables.</li>
+              <li>Rutas seguras para patrullas terrestres mediante detección subglacial y alerta inmediata.</li>
+              <li>Detección de personas en whiteout cruzando cromática de indumentaria y firma térmica.</li>
+              <li>Uso como repetidor VHF/UHF para restaurar comunicaciones y apoyo hombre al agua.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="module-stage is-reverse reveal-right">
+          <div class="module-stage-media">
+            <img src="assets/media/ara-almirante-irizar-marambio.jpg" alt="ARA Almirante Irízar navegando entre hielo antártico">
+          </div>
+          <div class="module-stage-copy">
+            <div class="module-stage-top">
+              <span class="tag">Módulo B</span>
+              <span class="module-stage-pill">Prioridad 2 · Logístico y naval</span>
+            </div>
+            <h3>Apoyo a campañas, rompehielos y seguridad de navegación</h3>
+            <p>
+              Este módulo convierte al sistema en vigía avanzado para el ARA Almirante Irízar, para
+              tractores sobre nieve y para operaciones de desembarco, sumando lectura anticipada del
+              hielo, la costa y la infraestructura.
+            </p>
+            <div class="module-stage-badges">
+              <span>Activable por separado</span>
+              <span>Campaña y rompehielos</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Mapeo de pack ice para trazar rutas de menor resistencia y ahorrar tiempo y combustible.</li>
+              <li>Detección de growlers letales para botes Zodiac durante aproximación y desembarco.</li>
+              <li>Lectura de rutas seguras para tractores y convoyes terrestres.</li>
+              <li>Inspección remota de techos, tensores y paneles solares sin exponer operarios.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="module-stage reveal-left">
+          <div class="module-stage-media">
+            <img src="assets/media/drone-pinguinos-enea.jpg" alt="Drone sobre colonia de pingüinos en la Antártida">
+          </div>
+          <div class="module-stage-copy">
+            <div class="module-stage-top">
+              <span class="tag">Módulo C</span>
+              <span class="module-stage-pill">Prioridad 3 · Científico</span>
+            </div>
+            <h3>Soporte al Instituto Antártico Argentino y a la observación de campo</h3>
+            <p>
+              La misma arquitectura sostiene censos inteligentes, monitoreo ambiental y producción de
+              bases de datos ordenadas para campañas científicas, sin perturbar el hábitat y con una
+              trazabilidad mucho más rica que la observación manual diferida.
+            </p>
+            <div class="module-stage-badges">
+              <span>Activable por separado</span>
+              <span>Censos y ambiente</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Conteo automatizado de pingüineras, focas y elefantes marinos.</li>
+              <li>Clasificación por especie y diferenciación entre adultos y crías.</li>
+              <li>Monitoreo de flora, agua y derretimiento del permafrost con sensores adecuados.</li>
+              <li>Generación de evidencia estructurada lista para laboratorio y comparación histórica.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="module-stage is-reverse reveal-right">
+          <div class="module-stage-media">
+            <img src="assets/media/saocom-campana-antartica.png" alt="Imagen SAOCOM utilizada para apoyo a la campaña antártica y al rompehielos Irízar">
+          </div>
+          <div class="module-stage-copy">
+            <div class="module-stage-top">
+              <span class="tag">Módulo D</span>
+              <span class="module-stage-pill">Prioridad 4 · Explotación y comando</span>
+            </div>
+            <h3>Centralización de datos y comando estratégico desde la base hasta Buenos Aires</h3>
+            <p>
+              Toda captura adquiere valor real cuando se organiza y democratiza. Este módulo convierte
+              la información en mapas, reportes, dashboards y flujos automatizados listos para
+              operación, laboratorio y mando estratégico.
+            </p>
+            <div class="module-stage-badges">
+              <span>Activable por separado</span>
+              <span>C4ISR y data lake</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Generación automática de planillas Excel/CSV y PDF listos para firma del comandante.</li>
+              <li>Mapas topográficos con semáforos de riesgo para autorizar salidas y maniobras.</li>
+              <li>Dashboards con kilómetros relevados, alertas estructurales y estado térmico del ambiente.</li>
+              <li>Sincronización segura vía satélite y futura interacción con los datos en lenguaje natural.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="entrenamiento">
+      <div class="section-head reveal">
+        <span class="eyebrow">4. La construcción del cerebro</span>
+        <h2>Los datos locales convierten experiencia histórica argentina en una capacidad soberana escalable.</h2>
+        <p>
+          El combustible del ecosistema son los datos locales. El documento remarca que el valor
+          distintivo del proyecto es que el Estado sea dueño del conocimiento de la IA y del ciclo de
+          vida del dato, desde la captura hasta la explotación estratégica.
+        </p>
+      </div>
+
+      <div class="timeline-grid">
+        <article class="timeline-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/database.png" alt="Ícono de base de datos">
+          </div>
+          <strong>Dataset institucional</strong>
+          <p>COCOANTAR e IAA aportan fotografías aéreas de grietas, grabaciones térmicas y censos visuales históricos.</p>
+        </article>
+        <article class="timeline-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/artificial-intelligence.png" alt="Ícono de inteligencia artificial">
+          </div>
+          <strong>Anotación y entrenamiento</strong>
+          <p>El laboratorio nacional etiqueta miles de imágenes y enseña a la red neuronal a leer la Antártida argentina.</p>
+        </article>
+        <article class="timeline-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/drone.png" alt="Ícono de despliegue">
+          </div>
+          <strong>Despliegue operativo</strong>
+          <p>El conocimiento entrenado se empaqueta y se carga en la placa NVIDIA de la plataforma de misión.</p>
+        </article>
+        <article class="timeline-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/bar-chart.png" alt="Ícono de crecimiento">
+          </div>
+          <strong>Evolución continua</strong>
+          <p>Cada nueva necesidad logística o científica se transforma en una actualización de software sobre la misma flota.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="beneficios">
+      <div class="section-head reveal">
+        <span class="eyebrow">5. Beneficios inmediatos para el Estado</span>
+        <h2>Latencia táctica, eficiencia satelital y patrimonio tecnológico nacional.</h2>
+        <p>
+          El cierre comercial del documento se concentra en tres beneficios directos: reacción
+          inmediata, ahorro satelital extremo y soberanía absoluta del dato. Juntos construyen un
+          argumento muy potente para adquisición, despliegue y evolución de la arquitectura.
+        </p>
+      </div>
+
+      <div class="benefits-grid">
+        <article class="benefit-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/radar.png" alt="Ícono de radar">
+          </div>
+          <span class="tag">Latencia cero</span>
+          <h3>Reacción inmediata en campo</h3>
+          <p>Las alertas se generan arriba del dron en milisegundos y fortalecen seguridad humana, navegación y coordinación táctica.</p>
+        </article>
+        <article class="benefit-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/satellite.png" alt="Ícono de satélite">
+          </div>
+          <span class="tag">Store-and-forward</span>
+          <h3>Uso eficiente de enlaces limitados</h3>
+          <p>La plataforma transmite resultados procesados y conserva ancho de banda para supervisión o descargas masivas cuando conviene.</p>
+        </article>
+        <article class="benefit-card reveal">
+          <div class="icon-chip">
+            <img src="https://img.icons8.com/color/96/safe.png" alt="Ícono de seguridad">
+          </div>
+          <span class="tag">Soberanía del dato</span>
+          <h3>Conocimiento propio y acumulativo</h3>
+          <p>La IA, la telemetría, los flujos y el aprendizaje permanecen bajo control estatal y crecen con cada campaña antártica.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="cierre-comercial">
+      <article class="conversion-strip reveal card">
         <div>
-          <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.2em] uppercase">Portafolio recomendado</p>
-          <h2 class="mt-2 font-orbitron font-bold text-3xl md:text-4xl">Productos ancla de la solución</h2>
+          <span class="eyebrow">Siguiente paso</span>
+          <h3>La narrativa ya ordena el proyecto. El próximo paso es presentar una propuesta escalable por módulos.</h3>
+          <p>
+            Para una exposición comercial, conviene cerrar con una invitación concreta: presentación
+            ejecutiva, dossier técnico o revisión de alcance para una primera fase desplegable. Esa
+            claridad ayuda a convertir interés en una conversación de compra.
+          </p>
         </div>
-        <p class="max-w-xl text-sm text-gray-400">Cada bloque combina medio no tripulado, sensores, navegación y potencial de integración con IA. La selección puede ajustarse por equivalencia técnica en un proceso de compra pública.</p>
+        <div class="conversion-strip-actions">
+          <a class="button button-primary" href="#top">Solicitar presentación ejecutiva</a>
+          <a class="button button-secondary" href="#modulos">Revisar propuesta modular</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <article class="quote-card reveal">
+        <div>
+          <span class="eyebrow">6. El argumento de cierre</span>
+          <h2>Una inversión que mantiene vigente la flota y amplía capacidades año tras año.</h2>
+          <p>
+            La tesis final del documento es patrimonial: el valor real no está solo en adquirir
+            plataformas, sino en dotarlas de una inteligencia que aprende, se actualiza y amplía su
+            alcance operativo con nuevos datasets, nuevos módulos y nuevas campañas.
+          </p>
+        </div>
+        <div class="quote-panel">
+          Invertir en esta arquitectura significa construir un patrimonio tecnológico nacional
+          impulsado por datos propios, adaptable a las exigencias soberanas de la República Argentina
+          en la Antártida y preparado para evolucionar con costo de hardware incremental mínimo.
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <div class="footer-grid">
+      <div>
+        <strong>Base narrativa</strong>
+        <p>
+          Esta landing fue desarrollada exclusivamente a partir del contenido del documento
+          <em>Ecosistema de Inteligencia Artificial Autónoma para Operaciones Antárticas.docx</em>,
+          reorganizando sus puntos críticos para una presentación comercial y ejecutiva.
+        </p>
       </div>
-
-      <div id="product-grid" class="space-y-10"></div>
-    </div>
-  </section>
-
-  <section id="arquitectura" data-nav-section data-nav-title="Arquitectura" class="py-12 md:py-18 scroll-mt-28">
-    <div class="max-w-7xl mx-auto px-5">
-      <div class="glass rounded-[2rem] p-6 md:p-8 overflow-hidden">
-        <div class="flex flex-wrap items-end justify-between gap-5 mb-8">
-          <div>
-            <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Arquitectura modular</p>
-            <h2 class="mt-2 font-orbitron font-bold text-3xl md:text-4xl">Capas de misión que escalan sin rehacer la inversión</h2>
-          </div>
-          <div class="max-w-xl text-sm text-gray-400">La solución se implementa por etapas: núcleo táctico, analítica inteligente, alcance extendido, persistencia marítima y módulos especializados.</div>
-        </div>
-
-        <div class="grid md:grid-cols-5 gap-4">
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Módulo 1</p>
-            <h3 class="mt-3 font-semibold text-lg">Núcleo táctico</h3>
-            <p class="mt-2 text-sm text-gray-400">Multirrotor ISR, estación de control, EO/IR y despliegue inmediato.</p>
-          </div>
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.16em] uppercase">Módulo 2</p>
-            <h3 class="mt-3 font-semibold text-lg">IA operacional</h3>
-            <p class="mt-2 text-sm text-gray-400">Alertas, clasificación, análisis de video y soporte a decisión.</p>
-          </div>
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Módulo 3</p>
-            <h3 class="mt-3 font-semibold text-lg">Alcance extendido</h3>
-            <p class="mt-2 text-sm text-gray-400">VTOL o ala fija para grandes áreas, autonomía y persistencia.</p>
-          </div>
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.16em] uppercase">Módulo 4</p>
-            <h3 class="mt-3 font-semibold text-lg">Superficie no tripulada</h3>
-            <p class="mt-2 text-sm text-gray-400">USV para monitoreo oceánico, seguridad marítima y batimetría.</p>
-          </div>
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Módulo 5</p>
-            <h3 class="mt-3 font-semibold text-lg">Sensores avanzados</h3>
-            <p class="mt-2 text-sm text-gray-400">GPR, LiDAR, CTD, sonar multihaz, modelos de anomalías y fauna.</p>
-          </div>
-        </div>
-
-        <div class="mt-8 grid lg:grid-cols-[1.15fr_.85fr] gap-6">
-          <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-6">
-            <p class="font-orbitron text-neuro-green text-xs tracking-[0.16em] uppercase">Flujo operativo</p>
-            <div class="mt-4 grid md:grid-cols-4 gap-3 text-sm">
-              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
-                <p class="font-semibold">Captura</p>
-                <p class="mt-2 text-gray-400">EO/IR, LiDAR, telemetría, sonar y sensores ambientales.</p>
-              </div>
-              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
-                <p class="font-semibold">Enlace</p>
-                <p class="mt-2 text-gray-400">Iridium para capa crítica y enlaces de mayor ancho de banda cuando aplique.</p>
-              </div>
-              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
-                <p class="font-semibold">Procesamiento</p>
-                <p class="mt-2 text-gray-400">Edge computing embarcado o estación táctica para priorizar eventos.</p>
-              </div>
-              <div class="rounded-2xl border border-white/10 p-4 bg-black/20">
-                <p class="font-semibold">Decisión</p>
-                <p class="mt-2 text-gray-400">Tableros, alertas, explotación de datos y trazabilidad de misión.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.16em] uppercase">Misiones objetivo</p>
-            <div class="mt-4 space-y-3 text-sm text-gray-300">
-              <div class="rounded-2xl border border-white/10 px-4 py-3">Búsqueda y rescate con apoyo térmico y priorización de hallazgos.</div>
-              <div class="rounded-2xl border border-white/10 px-4 py-3">Detección de grietas y anomalías como capacidad integrable y escalable.</div>
-              <div class="rounded-2xl border border-white/10 px-4 py-3">Reconocimiento de personas, vigilancia y evaluación de áreas de riesgo.</div>
-              <div class="rounded-2xl border border-white/10 px-4 py-3">Monitoreo ambiental, marítimo y de fauna con mínima perturbación humana.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="implementacion" data-nav-section data-nav-title="Implementación" class="py-12 md:py-18 scroll-mt-28">
-    <div class="max-w-7xl mx-auto px-5">
-      <div class="grid lg:grid-cols-2 gap-6">
-        <div class="glass rounded-[2rem] p-6 md:p-8">
-          <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Implementación recomendada</p>
-          <h2 class="mt-2 font-orbitron font-bold text-3xl">Hoja de ruta por fases</h2>
-          <div class="mt-6 space-y-4">
-            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-green">Fase 1</p>
-              <p class="mt-2 font-semibold">Capacidad inicial</p>
-              <p class="mt-2 text-sm text-gray-400">Plataforma táctica, estación de control, entrenamiento y procedimientos base.</p>
-            </div>
-            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-blue2">Fase 2</p>
-              <p class="mt-2 font-semibold">Analítica e IA</p>
-              <p class="mt-2 text-sm text-gray-400">Automatización de alertas, clasificación y tableros de explotación.</p>
-            </div>
-            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-green">Fase 3</p>
-              <p class="mt-2 font-semibold">Cobertura ampliada</p>
-              <p class="mt-2 text-sm text-gray-400">Integración de ala fija o VTOL de largo alcance y enlaces avanzados.</p>
-            </div>
-            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-blue2">Fase 4</p>
-              <p class="mt-2 font-semibold">Persistencia marítima y especialización</p>
-              <p class="mt-2 text-sm text-gray-400">USV, sensores específicos y perfiles de misión ajustados a teatro operativo.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="glass rounded-[2rem] p-6 md:p-8">
-          <p class="font-orbitron text-neuro-blue2 text-xs tracking-[0.2em] uppercase">Ventajas para decisión</p>
-          <h2 class="mt-2 font-orbitron font-bold text-3xl">Por qué esta propuesta es comprable</h2>
-          <div class="mt-6 grid gap-4">
-            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
-              <p class="font-semibold">Menor riesgo de implementación</p>
-              <p class="mt-2 text-sm text-gray-400">Se evita comprar un paquete cerrado e inmaduro. Se escala con hitos y validación operativa.</p>
-            </div>
-            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
-              <p class="font-semibold">Flexibilidad frente a bases y escenarios</p>
-              <p class="mt-2 text-sm text-gray-400">La configuración cambia según infraestructura disponible, clima, superficie y misión.</p>
-            </div>
-            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
-              <p class="font-semibold">Justificación de costo-beneficio</p>
-              <p class="mt-2 text-sm text-gray-400">Más utilidad por misión, mejor persistencia y menor exposición de personal en tareas de alto riesgo.</p>
-            </div>
-            <div class="rounded-3xl border border-white/10 p-5 bg-gradient-to-r from-white/5 to-transparent">
-              <p class="font-semibold">Base para crecimiento tecnológico</p>
-              <p class="mt-2 text-sm text-gray-400">Nuevos sensores, nuevos algoritmos y nuevas plataformas sin desarmar el núcleo del sistema.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer id="cierre" data-nav-section data-nav-title="Cierre" class="py-14 md:py-20 scroll-mt-28">
-    <div class="max-w-7xl mx-auto px-5">
-      <div class="glass rounded-[2rem] p-8 md:p-10 text-center">
-        <p class="font-orbitron text-neuro-green text-xs tracking-[0.2em] uppercase">Síntesis estratégica</p>
-        <h2 class="mt-3 font-orbitron font-black text-3xl md:text-5xl leading-tight">Una inversión en capacidad estratégica, no una compra aislada de equipos.</h2>
-        <p class="mt-5 max-w-3xl mx-auto text-gray-300 leading-relaxed">La propuesta integra medios probados, inteligencia aplicada, comunicaciones resilientes y escalabilidad por módulos para construir una capacidad real de defensa, reconocimiento y vigilancia en entornos extremos.</p>
-        <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
-          <a href="#productos" class="px-6 py-3 rounded-2xl bg-neuro-green text-black font-orbitron font-bold text-sm hover:bg-white transition">Revisar lineup</a>
-          <a href="#implementacion" class="px-6 py-3 rounded-2xl border border-white/10 bg-white/5 text-white font-orbitron font-bold text-sm hover:border-neuro-green/40 hover:text-neuro-green transition">Revisar fases</a>
-        </div>
+      <div class="source-links">
+        <strong>Fuentes visuales utilizadas</strong>
+        <a href="https://www.argentina.gob.ar/noticias/el-rompehielos-ara-almirante-irizar-reabastecio-la-base-antartica-conjunta-marambio" target="_blank" rel="noreferrer">Argentina.gob.ar | ARA Almirante Irízar en campaña antártica</a>
+        <a href="https://www.antarctica.gov.au/antarctic-operations/travel-and-logistics/aviation/drones-in-antarctica/" target="_blank" rel="noreferrer">Australian Antarctic Program | Drones in Antarctica</a>
+        <a href="https://es.innovando.news/Ping%C3%BCinos-y-monitoreo-de-giros-inteligentes-en-la-Ant%C3%A1rtida/" target="_blank" rel="noreferrer">Innovando News / ENEA | Monitoreo de pingüinos con drones e IA</a>
+        <a href="https://commons.wikimedia.org/wiki/File:AntarcticaDomeCSnowPetrel.jpg" target="_blank" rel="noreferrer">Wikimedia Commons / NASA | Entorno glaciar y grietas</a>
       </div>
     </div>
   </footer>
 
-  <div class="fixed bottom-5 left-1/2 z-40 hidden -translate-x-1/2 lg:flex items-center gap-3 presenter-dock rounded-[1.5rem] px-4 py-3">
-    <button type="button" data-nav-action="prev" class="px-4 py-3 rounded-2xl border border-white/10 bg-white/5 text-sm font-semibold text-white hover:border-neuro-green/40 hover:text-neuro-green transition">Anterior</button>
-    <div class="px-4 min-w-[220px]">
-      <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase text-gray-400">Modo exposición</p>
-      <p id="presenter-current" class="mt-1 font-orbitron text-sm text-white">Inicio</p>
-    </div>
-    <button type="button" data-nav-action="next" class="px-4 py-3 rounded-2xl bg-neuro-green text-black text-sm font-orbitron font-bold hover:bg-white transition">Siguiente</button>
-  </div>
-
-  <div class="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 xl:flex flex-col gap-2 presenter-dock rounded-[1.5rem] p-3">
-    <button type="button" data-section-target="inicio" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Inicio</button>
-    <button type="button" data-section-target="vision" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Visión</button>
-    <button type="button" data-section-target="productos" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Productos</button>
-    <button type="button" data-section-target="arquitectura" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Arquitectura</button>
-    <button type="button" data-section-target="implementacion" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Implementación</button>
-    <button type="button" data-section-target="cierre" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-xs text-gray-200">Cierre</button>
-  </div>
-
-  <div class="fixed inset-x-4 bottom-4 z-40 lg:hidden">
-    <div class="presenter-dock rounded-[1.5rem] p-3">
-      <div class="flex items-center gap-2">
-        <button type="button" data-nav-action="prev" class="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white">Anterior</button>
-        <button type="button" id="mobile-sections-toggle" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-neuro-green">Secciones</button>
-        <button type="button" data-nav-action="next" class="flex-1 rounded-2xl bg-neuro-green px-4 py-3 text-sm font-orbitron font-bold text-black">Siguiente</button>
-      </div>
-      <p id="mobile-presenter-current" class="mt-3 text-center text-xs tracking-[0.18em] uppercase text-gray-400">Inicio</p>
-      <div id="mobile-sections-panel" class="hidden mt-3 grid grid-cols-2 gap-2">
-        <button type="button" data-section-target="inicio" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Inicio</button>
-        <button type="button" data-section-target="vision" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Visión</button>
-        <button type="button" data-section-target="productos" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Productos</button>
-        <button type="button" data-section-target="arquitectura" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Arquitectura</button>
-        <button type="button" data-section-target="implementacion" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Implementación</button>
-        <button type="button" data-section-target="cierre" class="presenter-chip rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs text-gray-200">Cierre</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="video-modal" class="video-modal-backdrop hidden" aria-hidden="true">
-    <div class="video-modal-dialog">
-      <div class="flex items-center justify-between gap-4 px-5 py-4 border-b border-white/10">
-        <div class="min-w-0">
-          <p class="font-orbitron text-[11px] tracking-[0.18em] uppercase text-neuro-green">Modo presentaci&oacute;n</p>
-          <h3 id="video-modal-title" class="mt-1 font-orbitron font-bold text-lg md:text-2xl truncate">Video</h3>
-        </div>
-        <div class="flex items-center gap-2">
-          <button id="video-fullscreen-btn" type="button" class="px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-sm text-white hover:border-neuro-green/40 hover:text-neuro-green transition">Pantalla completa</button>
-          <button id="video-modal-close" type="button" class="w-11 h-11 rounded-xl border border-white/10 bg-white/5 text-xl leading-none hover:border-neuro-green/40 hover:text-neuro-green transition" aria-label="Cerrar visor">&times;</button>
-        </div>
-      </div>
-      <div class="p-4 md:p-5">
-        <div id="video-modal-stage" class="video-modal-stage rounded-[1.5rem] overflow-hidden border border-white/10">
-          <iframe id="video-modal-frame" src="about:blank" title="Video en grande" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </div>
-        <div class="mt-4 flex flex-wrap items-center gap-3">
-          <p id="video-modal-note" class="video-modal-note rounded-2xl px-4 py-3 text-sm text-gray-300"></p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const products = [
-      {
-        name: 'DJI Matrice 350 RTK',
-        category: 'UAV táctico multirrotor',
-        accent: 'green',
-        subtitle: 'Respuesta rápida, ISR y apoyo SAR con precisión RTK.',
-        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/2025-07-10-Waldbrand%C3%BCbung-3625.jpg',
-        preview: 'https://img.youtube.com/vi/JPPHG5dSpwM/hqdefault.jpg',
-        imageFocus: 'center center',
-        detailFocus: '62% center',
-        video: 'https://www.youtube.com/embed/JPPHG5dSpwM',
-        bullets: [
-          'Hasta 55 min de vuelo',
-          'Protección IP55',
-          'Carga útil máxima 2,7 kg',
-          'Rango operativo publicado de -20 °C a 50 °C'
-        ],
-        use: 'Ideal para vigilancia táctica, inspección, reconocimiento cercano y apoyo en búsqueda y rescate.',
-        tags: ['EO/IR', 'RTK', 'Night Ops', 'ISR']
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
       },
-      {
-        name: 'DeltaQuad Evo Tactical',
-        category: 'VTOL de largo alcance',
-        accent: 'blue',
-        subtitle: 'Cobertura extendida sin necesidad de pista preparada.',
-        image: 'https://a.storyblok.com/f/294510/1920x1280/547fb64d93/evo-section-2-image.png',
-        preview: 'https://img.youtube.com/vi/xJ2aFkWXlcE/hqdefault.jpg',
-        imageFocus: 'center center',
-        detailFocus: '74% center',
-        video: 'https://www.youtube.com/embed/xJ2aFkWXlcE',
-        bullets: [
-          'Hasta 230 km de rango máximo publicado',
-          'Hasta 225 min de autonomía publicada según configuración',
-          'Temperatura publicada de -20 °C a 45 °C',
-          'Diseñado para ISR, seguimiento y entrega liviana'
-        ],
-        use: 'Conviene cuando hay grandes áreas, infraestructura mínima y necesidad de despegue/aterrizaje vertical.',
-        tags: ['VTOL', 'ISR', 'ATAK', 'Thermal']
-      },
-      {
-        name: 'Windracers ULTRA',
-        category: 'Ala fija autónoma de gran carga',
-        accent: 'green',
-        subtitle: 'Carga pesada, gran alcance y utilidad dual para defensa y logística.',
-        image: 'https://windracers.com/wp-content/uploads/2024/12/Windracers-ULTRA-Parcel-Loading-1-copy.jpg.webp',
-        preview: 'https://img.youtube.com/vi/OO8RZYkZcx0/hqdefault.jpg',
-        imageFocus: 'center center',
-        detailFocus: '60% center',
-        video: 'https://www.youtube.com/embed/OO8RZYkZcx0',
-        bullets: [
-          'Más de 150 kg de carga útil publicada',
-          'Hasta 2.000 km de alcance publicado',
-          'Hasta 15 h de endurance publicada',
-          'Diseñado para operar en hielo y nieve con enfoque multi-misión'
-        ],
-        use: 'Aporta logística autónoma, investigación y misiones de largo alcance donde otros medios quedan limitados.',
-        tags: ['Heavy Lift', 'Autonomy', 'Cargo', 'Defence']
-      },
-      {
-        name: 'Saildrone Surveyor / Explorer',
-        category: 'USV de persistencia oceánica',
-        accent: 'blue',
-        subtitle: 'Monitoreo marítimo, seguridad y levantamiento de datos con muy alta persistencia.',
-        image: 'https://cdn.prod.website-files.com/653530fc2845a4410ac6dd36/6942968146e20c4d2f694ddf_mda-cta.avif',
-        preview: 'https://img.youtube.com/vi/hpTc3Yc4HrU/hqdefault.jpg',
-        imageFocus: 'center center',
-        detailFocus: '35% center',
-        video: 'https://www.youtube.com/embed/hpTc3Yc4HrU',
-        bullets: [
-          'Explorer: vehículo de 23 pies impulsado por viento y energía solar',
-          'Misiones de hasta 12 meses publicadas por Saildrone',
-          'Surveyor equipado para ocean mapping y acústica avanzada',
-          'Operaciones desde el Ártico hasta la Antártida'
-        ],
-        use: 'Resuelve persistencia oceánica, dominio marítimo, monitoreo ambiental y batimetría con menor riesgo humano.',
-        tags: ['USV', 'Ocean Data', 'MDA', 'Survey']
-      }
-    ];
+      { threshold: 0.12 }
+    );
 
-    function tagClass(accent) {
-      return accent === 'green'
-        ? 'text-neuro-green border-neuro-green/30 bg-neuro-green/10'
-        : 'text-neuro-blue2 border-neuro-blue2/30 bg-neuro-blue/10';
-    }
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach((element) => observer.observe(element));
 
-    function getVideoId(url) {
-      const match = url.match(/(?:embed\/|watch\?v=|youtu\.be\/)([\w-]{11})/);
-      return match ? match[1] : '';
-    }
+    const heroVisual = document.querySelector(".hero-visual");
+    const heroImage = heroVisual?.querySelector("img");
+    const heroStack = heroVisual?.querySelector(".hero-stack");
 
-    function getEmbedUrl(videoId) {
-      const params = new URLSearchParams({
-        autoplay: '1',
-        rel: '0',
-        modestbranding: '1',
-        playsinline: '1'
-      });
-      return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
-    }
+    const updateHeroParallax = () => {
+      if (!heroVisual || !heroImage || !heroStack) return;
+      const rect = heroVisual.getBoundingClientRect();
+      const viewport = window.innerHeight || 1;
+      const offset = ((rect.top + rect.height / 2) - viewport / 2) / viewport;
+      heroImage.style.setProperty("--hero-image-shift", `${offset * -26}px`);
+      heroStack.style.setProperty("--hero-stack-shift", `${offset * -14}px`);
+    };
 
-    function escapeAttr(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
+    updateHeroParallax();
+    window.addEventListener("scroll", updateHeroParallax, { passive: true });
+    window.addEventListener("resize", updateHeroParallax);
 
-    function buildGallery(product) {
-      return [
-        {
-          src: product.image,
-          fallback: product.preview,
-          label: 'Vista principal',
-          caption: product.name,
-          position: product.imageFocus || 'center center'
-        },
-        {
-          src: product.preview,
-          fallback: product.image,
-          label: 'Escena operativa',
-          caption: product.subtitle,
-          position: 'center center'
-        },
-        {
-          src: product.image,
-          fallback: product.preview,
-          label: 'Detalle de plataforma',
-          caption: product.tags.slice(0, 2).join(' • '),
-          position: product.detailFocus || 'center center'
-        }
-      ];
-    }
+    const spotlightCards = document.querySelectorAll(
+      ".hero-metric, .media-card, .section-card, .pillar-card, .pillar-panel, .module-stage, .metric-card, .module-card, .benefit-card, .timeline-card"
+    );
 
-    const prefersLocalPresentationMode = window.location.protocol === 'file:';
-    const normalizedProducts = products.map(product => {
-      const videoId = getVideoId(product.video);
-      return {
-        ...product,
-        videoId,
-        gallery: buildGallery(product)
-      };
-    });
-
-    const grid = document.getElementById('product-grid');
-    grid.innerHTML = normalizedProducts.map((p, i) => `
-      <article class="glass tech-shell rounded-[2rem] p-5 md:p-7 overflow-hidden">
-        <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-6 items-start">
-          <div class="${i % 2 === 1 ? 'lg:order-2' : ''}">
-            <div class="tech-media tech-carousel rounded-[1.5rem] border border-white/10" data-carousel>
-              <div class="tech-carousel-stage h-[220px] md:h-[280px]">
-                ${p.gallery.map((slide, slideIndex) => `
-                  <figure class="tech-slide ${slideIndex === 0 ? 'is-active' : ''}" data-slide-index="${slideIndex}">
-                    <img
-                      src="${slide.src}"
-                      data-fallback="${slide.fallback}"
-                      onerror="if(this.dataset.fallback && this.src !== this.dataset.fallback){this.src=this.dataset.fallback}"
-                      alt="${p.name} - ${slide.label}"
-                      style="object-position:${slide.position};"
-                      class="opacity-90"
-                    >
-                    <div class="tech-image-tag">
-                      <div>
-                        <p class="font-orbitron text-[10px] tracking-[0.18em] uppercase ${p.accent === 'green' ? 'text-neuro-green' : 'text-neuro-blue2'}">${slide.label}</p>
-                        <p class="mt-1 text-sm font-semibold text-white">${slide.caption}</p>
-                      </div>
-                      <span class="tech-dot" aria-hidden="true"></span>
-                    </div>
-                  </figure>
-                `).join('')}
-              </div>
-              <div class="tech-carousel-dots" role="tablist" aria-label="Galería visual de ${p.name}">
-                ${p.gallery.map((slide, slideIndex) => `
-                  <button
-                    type="button"
-                    class="tech-carousel-dot ${slideIndex === 0 ? 'is-active' : ''}"
-                    data-carousel-dot="${slideIndex}"
-                    aria-label="Ver ${slide.label.toLowerCase()}"
-                  ></button>
-                `).join('')}
-              </div>
-            </div>
-            <div class="mt-4 video-showcase">
-              <button
-                type="button"
-                class="video-preview group"
-                data-video-mode="modal"
-                data-video-id="${p.videoId}"
-                data-video-title="${escapeAttr(p.name)}"
-              >
-                <img src="${p.preview}" alt="Vista previa de ${p.name}">
-                <div class="video-preview-overlay">
-                  <div class="flex items-start justify-between gap-3">
-                    <span class="inline-flex px-3 py-1.5 rounded-full text-[11px] font-orbitron tracking-[0.18em] uppercase border ${tagClass(p.accent)}">Video del producto</span>
-                    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/30 text-[11px] uppercase tracking-[0.16em] text-gray-200">
-                      Reproducci&oacute;n integrada
-                    </span>
-                  </div>
-                  <div class="flex items-end justify-between gap-4">
-                    <div>
-                      <p class="font-orbitron text-xl md:text-2xl font-bold">${p.name}</p>
-                      <p class="mt-2 max-w-xl text-sm text-gray-200">${p.subtitle}</p>
-                    </div>
-                    <span class="video-play shrink-0" aria-hidden="true">
-                      <span class="video-icon-play"></span>
-                    </span>
-                  </div>
-                </div>
-              </button>
-              <div class="video-actions">
-                <button
-                  type="button"
-                  class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-neuro-green text-black font-orbitron font-bold text-xs hover:bg-white transition"
-                  data-video-mode="inline"
-                  data-video-id="${p.videoId}"
-                  data-video-title="${escapeAttr(p.name)}"
-                >
-                  Reproducir aqu&iacute;
-                </button>
-                <button
-                  type="button"
-                  class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border border-white/10 bg-white/5 text-white font-orbitron font-bold text-xs hover:border-neuro-green/40 hover:text-neuro-green transition"
-                  data-video-mode="modal"
-                  data-video-id="${p.videoId}"
-                  data-video-title="${escapeAttr(p.name)}"
-                >
-                  Presentar en grande
-                </button>
-              </div>
-              <div class="video-inline hidden">
-                <div class="video-frame">
-                  <iframe class="video-inline-frame w-full h-full" src="about:blank" title="Reproductor integrado de ${p.name}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="${i % 2 === 1 ? 'lg:order-1' : ''}">
-            <div class="inline-flex px-3 py-1.5 rounded-full text-[11px] font-orbitron tracking-[0.18em] uppercase border ${tagClass(p.accent)}">${p.category}</div>
-            <h3 class="mt-4 font-orbitron font-bold text-2xl md:text-4xl leading-tight">${p.name}</h3>
-            <p class="mt-3 text-gray-300 text-base md:text-lg">${p.subtitle}</p>
-            <p class="mt-4 text-sm text-gray-400 leading-relaxed">${p.use}</p>
-
-            <div class="mt-5 grid sm:grid-cols-2 gap-3">
-              ${p.bullets.map(b => `<div class="spec-pill rounded-2xl p-4 text-sm text-gray-200">${b}</div>`).join('')}
-            </div>
-
-            <div class="mt-5 flex flex-wrap gap-2">
-              ${p.tags.map(t => `<span class="px-3 py-1.5 rounded-full text-xs border border-white/10 bg-white/5 text-gray-300">${t}</span>`).join('')}
-            </div>
-
-            <div class="mt-6 rounded-3xl border border-white/10 bg-gradient-to-r from-white/5 to-transparent p-5">
-              <p class="font-orbitron text-[11px] tracking-[0.16em] uppercase ${p.accent === 'green' ? 'text-neuro-green' : 'text-neuro-blue2'}">Encaje dentro del sistema</p>
-              <p class="mt-2 text-sm text-gray-400">Se integra con navegación precisa, sensores especializados, enlaces de misión y una capa de IA desplegable en edge computing o estación táctica.</p>
-            </div>
-          </div>
-        </div>
-      </article>
-    `).join('');
-
-    function setCarouselSlide(carousel, nextIndex) {
-      const slides = Array.from(carousel.querySelectorAll('.tech-slide'));
-      const dots = Array.from(carousel.querySelectorAll('.tech-carousel-dot'));
-      if (!slides.length) return;
-
-      const normalizedIndex = (nextIndex + slides.length) % slides.length;
-      carousel.dataset.activeSlide = String(normalizedIndex);
-
-      slides.forEach((slide, index) => {
-        slide.classList.toggle('is-active', index === normalizedIndex);
-      });
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('is-active', index === normalizedIndex);
-      });
-    }
-
-    function startCarousel(carousel) {
-      const slides = carousel.querySelectorAll('.tech-slide');
-      if (slides.length < 2) return;
-
-      const rotate = () => {
-        const current = Number(carousel.dataset.activeSlide || 0);
-        setCarouselSlide(carousel, current + 1);
-      };
-
-      let intervalId = window.setInterval(rotate, 4300);
-      carousel.addEventListener('mouseenter', () => window.clearInterval(intervalId));
-      carousel.addEventListener('mouseleave', () => {
-        window.clearInterval(intervalId);
-        intervalId = window.setInterval(rotate, 4300);
-      });
-    }
-
-    document.querySelectorAll('[data-carousel]').forEach(carousel => {
-      setCarouselSlide(carousel, 0);
-      startCarousel(carousel);
-
-      carousel.addEventListener('click', event => {
-        const dot = event.target.closest('[data-carousel-dot]');
-        if (!dot) return;
-        setCarouselSlide(carousel, Number(dot.dataset.carouselDot || 0));
+    spotlightCards.forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty("--spot-x", `${x}%`);
+        card.style.setProperty("--spot-y", `${y}%`);
       });
     });
 
-    const modal = document.getElementById('video-modal');
-    const modalDialog = modal.querySelector('.video-modal-dialog');
-    const modalTitle = document.getElementById('video-modal-title');
-    const modalFrame = document.getElementById('video-modal-frame');
-    const modalNote = document.getElementById('video-modal-note');
-    const modalClose = document.getElementById('video-modal-close');
-    const modalFullscreen = document.getElementById('video-fullscreen-btn');
-    const navSections = Array.from(document.querySelectorAll('[data-nav-section]'));
-    const navCurrent = document.getElementById('presenter-current');
-    const navMobileCurrent = document.getElementById('mobile-presenter-current');
-    const mobileSectionsToggle = document.getElementById('mobile-sections-toggle');
-    const mobileSectionsPanel = document.getElementById('mobile-sections-panel');
-    const sectionTargetButtons = Array.from(document.querySelectorAll('[data-section-target]'));
-    let activeSectionIndex = 0;
+    const compareStage = document.getElementById("compare-stage");
+    const compareSlider = document.getElementById("compare-slider");
 
-    function stopInlinePlayers(exceptFrame = null) {
-      document.querySelectorAll('.video-inline').forEach(container => {
-        const frame = container.querySelector('.video-inline-frame');
-        if (!frame || frame === exceptFrame) return;
-        frame.src = 'about:blank';
-        container.classList.add('hidden');
-      });
+    const updateCompare = (value) => {
+      if (!compareStage) return;
+      compareStage.style.setProperty("--compare-position", `${value}%`);
+    };
+
+    if (compareSlider) {
+      updateCompare(compareSlider.value);
+      compareSlider.addEventListener("input", (event) => updateCompare(event.target.value));
     }
-
-    function openInlineVideo(videoId, trigger) {
-      if (!videoId) return;
-      const showcase = trigger.closest('.video-showcase');
-      if (!showcase) return;
-
-      const inlineContainer = showcase.querySelector('.video-inline');
-      const inlineFrame = showcase.querySelector('.video-inline-frame');
-      if (!inlineContainer || !inlineFrame) return;
-
-      const nextSrc = getEmbedUrl(videoId);
-      const isSameVideo = inlineFrame.dataset.videoId === videoId;
-      const isOpen = !inlineContainer.classList.contains('hidden') && isSameVideo;
-
-      if (isOpen) {
-        inlineFrame.src = 'about:blank';
-        inlineFrame.dataset.videoId = '';
-        inlineContainer.classList.add('hidden');
-        return;
-      }
-
-      stopInlinePlayers(inlineFrame);
-      inlineFrame.src = nextSrc;
-      inlineFrame.dataset.videoId = videoId;
-      inlineContainer.classList.remove('hidden');
-    }
-
-    function openVideoModal(videoId, title) {
-      if (!videoId) return;
-
-      stopInlinePlayers();
-      modalTitle.textContent = title;
-      modal.classList.remove('hidden');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('overflow-hidden');
-      modalFrame.src = getEmbedUrl(videoId);
-      modalNote.innerHTML = prefersLocalPresentationMode
-        ? 'Si el navegador muestra Error 153 al abrir el HTML como archivo local, servilo por localhost para que YouTube reciba el referer correcto sin salir de la landing.'
-        : 'El video se reproduce dentro de la misma landing y pod&eacute;s ampliarlo a pantalla completa.';
-    }
-
-    function closeVideoModal() {
-      modal.classList.add('hidden');
-      modal.setAttribute('aria-hidden', 'true');
-      modalFrame.src = 'about:blank';
-      document.body.classList.remove('overflow-hidden');
-    }
-
-    function syncSectionUI(index) {
-      const section = navSections[index];
-      if (!section) return;
-
-      const title = section.dataset.navTitle || 'Sección';
-      activeSectionIndex = index;
-      navCurrent.textContent = title;
-      navMobileCurrent.textContent = title;
-
-      sectionTargetButtons.forEach(button => {
-        const isActive = button.dataset.sectionTarget === section.id;
-        button.setAttribute('aria-current', isActive ? 'true' : 'false');
-      });
-    }
-
-    function goToSection(index) {
-      const boundedIndex = Math.max(0, Math.min(navSections.length - 1, index));
-      const section = navSections[boundedIndex];
-      if (!section) return;
-
-      syncSectionUI(boundedIndex);
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      mobileSectionsPanel.classList.add('hidden');
-    }
-
-    const sectionObserver = new IntersectionObserver(entries => {
-      const visibleEntry = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-      if (!visibleEntry) return;
-
-      const index = navSections.findIndex(section => section === visibleEntry.target);
-      if (index >= 0) {
-        syncSectionUI(index);
-      }
-    }, {
-      threshold: [0.3, 0.45, 0.6, 0.8],
-      rootMargin: '-20% 0px -35% 0px'
-    });
-
-    navSections.forEach(section => sectionObserver.observe(section));
-    syncSectionUI(0);
-
-    grid.addEventListener('click', event => {
-      const trigger = event.target.closest('button[data-video-id]');
-      if (!trigger) return;
-
-      if ((trigger.dataset.videoMode || 'modal') === 'inline') {
-        openInlineVideo(trigger.dataset.videoId, trigger);
-        return;
-      }
-
-      openVideoModal(
-        trigger.dataset.videoId,
-        trigger.dataset.videoTitle || 'Video'
-      );
-    });
-
-    document.querySelectorAll('[data-nav-action]').forEach(button => {
-      button.addEventListener('click', () => {
-        const step = button.dataset.navAction === 'next' ? 1 : -1;
-        goToSection(activeSectionIndex + step);
-      });
-    });
-
-    sectionTargetButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const index = navSections.findIndex(section => section.id === button.dataset.sectionTarget);
-        if (index >= 0) {
-          goToSection(index);
-        }
-      });
-    });
-
-    mobileSectionsToggle.addEventListener('click', () => {
-      mobileSectionsPanel.classList.toggle('hidden');
-    });
-
-    modalClose.addEventListener('click', closeVideoModal);
-    modal.addEventListener('click', event => {
-      if (event.target === modal) {
-        closeVideoModal();
-      }
-    });
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
-        closeVideoModal();
-      }
-    });
-
-    modalFullscreen.addEventListener('click', async () => {
-      try {
-        if (document.fullscreenElement) {
-          await document.exitFullscreen();
-          return;
-        }
-        await modalDialog.requestFullscreen();
-      } catch (error) {
-        console.warn('No se pudo activar pantalla completa', error);
-      }
-    });
   </script>
 </body>
 </html>
